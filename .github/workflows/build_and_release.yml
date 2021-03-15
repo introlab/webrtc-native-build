@@ -59,7 +59,7 @@ jobs:
       with:
         submodules: recursive
     
-    - name: Get Download URL Artifact 
+    - name: Get Upload URL Artifact 
     - uses: actions/download-artifact@v2
       with:
         name: release_url

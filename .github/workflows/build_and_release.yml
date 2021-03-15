@@ -41,7 +41,7 @@ jobs:
     - name: Output Release URL File
       run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
     - name: Save Release URL File for publish
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: release_url
         path: release_url.txt
@@ -89,8 +89,7 @@ jobs:
     - name: Get Upload URL
       id: get_release_info
       run: |
-        value=`cat release_url/release_url.txt`
-        echo ::set-output name=upload_url::$value
+        echo "::set-output name=upload_url::$(cat release_url.txt)"
       env:
         TAG_REF_NAME: ${{ github.ref }}
         REPOSITORY_NAME: ${{ github.repository }}    

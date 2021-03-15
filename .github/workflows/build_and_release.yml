@@ -85,7 +85,16 @@ jobs:
         sudo apt-get install ninja-build cmake build-essential libssl-dev libboost-all-dev 
         sudo apt-get install libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev 
         sudo apt-get install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
-  
+        
+    - name: Get Upload URL
+      id: get_release_info
+      run: |
+        value=`cat release_url/release_url.txt`
+        echo ::set-output name=upload_url::$value
+      env:
+        TAG_REF_NAME: ${{ github.ref }}
+        REPOSITORY_NAME: ${{ github.repository }}    
+        
     - name: Create build directory
       working-directory: .
       run: |
@@ -102,15 +111,6 @@ jobs:
       working-directory: dist/${{ matrix.build-type }}
       run : |
         tar cvzf ${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz webrtc-native-build-${{ steps.generate_version_output.outputs.version }}
-        
-    - name: Get Release File Name & Upload URL
-      id: get_release_info
-      run: |
-        value=`cat release_url/release_url.txt`
-        echo ::set-output name=upload_url::$value
-      env:
-        TAG_REF_NAME: ${{ github.ref }}
-        REPOSITORY_NAME: ${{ github.repository }}
         
     - name: Upload Release Asset
       id: upload-release-asset 

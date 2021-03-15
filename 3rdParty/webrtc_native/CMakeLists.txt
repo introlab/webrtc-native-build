@@ -75,7 +75,7 @@ elseif (UNIX)
         )
             
         if(NOT ${build_sysroot_architecture} EQUAL 0)
-            message(FATAL_ERROR "\"python install-sysroot.py --arch=arm32\" failed (${build_sysroot_architecture})")
+            message(FATAL_ERROR "\"python install-sysroot.py --arch=arm\" failed (${build_sysroot_architecture})")
         endif()
     endif()
 

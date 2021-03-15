@@ -14,7 +14,9 @@ if (CMAKE_BUILD_ARCHITECTURE MATCHES arm64)
     set(CMAKE_C_COMPILER /usr/bin/aarch64-linux-gnu-gcc)
     set(CMAKE_CXX_COMPILER /usr/bin/aarch64-linux-gnu-g++)
 else()
+    # Will use native compiler
     set(CMAKE_BUILD_ARCHITECTURE amd64)
+    # set(CMAKE_SYSROOT ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/webrtc_native/webrtc/src/build/linux/debian_sid_amd64-sysroot)
 endif()
 
 # Verify build type

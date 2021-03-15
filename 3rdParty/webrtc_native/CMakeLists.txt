@@ -53,23 +53,27 @@ elseif (UNIX)
         endif()
     endif()
 
-    execute_process(
-            COMMAND python2 install-sysroot.py --arch=arm64
-            WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src/build/linux/sysroot_scripts"
-            RESULT_VARIABLE build_sysroot_aarch64
-    )
-        
-    if(NOT ${build_sysroot_aarch64} EQUAL 0)
-        message(FATAL_ERROR "\"python install-sysroot.py --arch=arm64\" failed (${build_sysroot_aarch64})")
+
+    if (CMAKE_BUILD_ARCHITECTURE MATCHES arm64)
+        execute_process(
+                COMMAND python2 install-sysroot.py --arch=${CMAKE_BUILD_ARCHITECTURE}
+                WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src/build/linux/sysroot_scripts"
+                RESULT_VARIABLE build_sysroot_architecture
+        )
+            
+        if(NOT ${build_sysroot_architecture} EQUAL 0)
+            message(FATAL_ERROR "\"python install-sysroot.py --arch=arm64\" failed (${build_sysroot_architecture})")
+        endif()
     endif()
 
+
     execute_process(
-            COMMAND "${CMAKE_CURRENT_LIST_DIR}/generate_ninja_files.bash" "${CMAKE_SYSROOT}"
+            COMMAND "${CMAKE_CURRENT_LIST_DIR}/generate_ninja_files.bash" "${CMAKE_BUILD_ARCHITECTURE}" "${CMAKE_SYSROOT}"
             WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src"
-            RESULT_VARIABLE gn_webrtc_result
+            RESULT_VARIABLE generate_ninja_files_result
     )
-    if(NOT ${gn_webrtc_result} EQUAL 0)
-        message(FATAL_ERROR "\"generate_ninja_files.bash\" failed (${gn_webrtc_result})")
+    if(NOT ${generate_ninja_files_result} EQUAL 0)
+        message(FATAL_ERROR "\"generate_ninja_files.bash\" failed (${generate_ninja_files_result})")
     endif()
 
     add_custom_target(

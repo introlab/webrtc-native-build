@@ -13,8 +13,9 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-18.04 ubuntu-20.04]
+        os: [ubuntu-18.04, ubuntu-20.04]
         architecture: [arm64]
+        build-type: [Release]
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -49,7 +50,7 @@ jobs:
     - name: Generate Release File Name
       id: generate_release_file_name
       run: |
-        echo "::set-output name=release_file_name::opentera-webrtc-native-client-${{runner.os}}-\
+        echo "::set-output name=release_file_name::webrtc-native-build-${{runner.os}}-\
         ${{ steps.generate_os_release_name_output.outputs.os_release_name }}-\
         ${{ steps.generate_os_release_version_output.outputs.os_release_version }}-\
         ${{ steps.generate_os_release_architecture_output.outputs.os_release_architecture }}-\
@@ -61,16 +62,19 @@ jobs:
         
     - name: Install system dependencies
       run: | 
-        sudo apt-get update
         sudo apt-get install ninja-build cmake build-essential libssl-dev libboost-all-dev 
         sudo apt-get install libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev 
         sudo apt-get install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
-        sudo mkdir build
+  
+    - name: Create build directory
+      working-directory: .
+      run: |
+        mkdir build
         
-    - name: Run CMake and build opentera-webrtc-native-client
+    - name: Run CMake and build webrtc-native-build
       working-directory: build
       run: |
-        cmake ../
+        cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type}} -DARCHITECTURE=${{ matrix.architecture }}
         make -j2
         make install
         

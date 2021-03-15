@@ -1,0 +1,22 @@
+# Testing Windows Build
+name: test_build_windows
+
+on:
+  workflow_dispatch:
+    branches: [ main ]
+
+jobs:
+
+  build:
+      strategy:
+        matrix:
+          os: [windows-2019]
+          architecture: [win64]
+          build-type: [Release, Debug]
+          
+      runs-on: ${{ matrix.os }}
+      steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          

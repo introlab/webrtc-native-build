@@ -15,6 +15,7 @@ jobs:
       matrix:
         os: [ubuntu-18.04, ubuntu-20.04]
         architecture: [arm64]
+        build-type: [Release]
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -49,7 +50,7 @@ jobs:
     - name: Generate Release File Name
       id: generate_release_file_name
       run: |
-        echo "::set-output name=release_file_name::opentera-webrtc-native-client-${{runner.os}}-\
+        echo "::set-output name=release_file_name::webrtc-native-build-${{runner.os}}-\
         ${{ steps.generate_os_release_name_output.outputs.os_release_name }}-\
         ${{ steps.generate_os_release_version_output.outputs.os_release_version }}-\
         ${{ steps.generate_os_release_architecture_output.outputs.os_release_architecture }}-\

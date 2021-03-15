@@ -14,8 +14,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-18.04, ubuntu-20.04]
-        architecture: [arm64]
-        build-type: [Release]
+        architecture: [arm64, amd64]
+        build-type: [Release, Debug]
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -74,7 +74,7 @@ jobs:
     - name: Run CMake and build webrtc-native-build
       working-directory: build
       run: |
-        cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type}} -DARCHITECTURE=${{ matrix.architecture }}
+        cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type}} -DCMAKE_BUILD_ARCHITECTURE=${{ matrix.architecture }}
         make -j2
         make install
         

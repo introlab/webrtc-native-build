@@ -12,7 +12,6 @@ extra_flags=""
 case "$architecture" in
 	i?86)
 		a=x86
-		
 		extras=""
 		extra_flags=""
 	;;

@@ -6,15 +6,21 @@ Native build of Google's webrtc library.
 
 ## Dependencies
 ```bash
-apt-get install list all modules...
+sudo apt-get install ninja-build cmake build-essential libssl-dev libboost-all-dev 
+sudo apt-get install libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev 
+sudo apt-get install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
 ```
 
 ## Building
 
 ```bash
+# Create build directory
 mkdir build
+# Go to build directory
 cd build
-cmake ../
+# Run CMake with arguments
+cmake ../ [-DCMAKE_BUILD_TYPE=Release|Debug] [-DCMAKE_BUILD_ARCHITECTURE=arm64|amd64]
+# Parallel build
 make -j
 # will copy to dist directory
 make install

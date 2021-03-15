@@ -63,6 +63,7 @@ jobs:
       id: get_release_info
       run: |
         echo "::set-output name=upload_url::$(cat release_url.txt)"
+        ls -l
         cat release_url.txt
         
     - name: Generate Version Output

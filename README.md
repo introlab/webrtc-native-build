@@ -20,6 +20,9 @@ make -j
 make install
 ```
 
+## Versioning Scheme
+`branch-head-number`.`commit-hash`.`patch-number`
+
 ## Authors
 
 * Marc-Antoine Maheux (@mamaheux)

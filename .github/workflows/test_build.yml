@@ -62,3 +62,38 @@ jobs:
         make -j2
         make install
         
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ steps.generate_version_output.outputs.version }}
+        release_name: opentera-webrtc-native-client-${{ steps.generate_version_output.outputs.version }}
+        body: |
+            Latest build of opentera-webrtc-native-client
+            - This is a prerelease, use at your own risks.
+        draft: true
+        prerelease: true
+     
+    - name: Create Archive
+      working-directory: dist/${{ matrix.build-type }}
+      run : |
+        tar cvzf ${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz webrtc-native-build-${{ steps.generate_version_output.outputs.version }}
+        
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: dist/${{ matrix.build-type }}/${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz
+        asset_name: ${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz
+        asset_content_type: application/x-gzip   
+        
+        
+        
+        
+        
+        

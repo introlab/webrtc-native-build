@@ -47,6 +47,7 @@ jobs:
         path: release_url.txt
 
   build:
+    needs: create-release
     strategy:
       matrix:
         os: [ubuntu-18.04, ubuntu-20.04]

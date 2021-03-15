@@ -16,7 +16,7 @@ jobs:
         os: [ubuntu-18.04 ubuntu-20.04]
         architecture: [arm64]
 
-    runs-on: {{ matrix.os}}
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
       with:

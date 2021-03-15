@@ -71,7 +71,7 @@ jobs:
         tag_name: ${{ steps.generate_version_output.outputs.version }}
         release_name: webrtc-native-build-${{ steps.generate_version_output.outputs.version }}
         body: |
-            Latest build of opentera-webrtc-native-client
+            Latest build of webrtc-native-build
             - This is a prerelease, use at your own risks.
         draft: true
         prerelease: true

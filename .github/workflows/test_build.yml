@@ -74,7 +74,7 @@ jobs:
     - name: Run CMake and build webrtc-native-build
       working-directory: build
       run: |
-        cmake ../
+        cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type}} -DARCHITECTURE=${{ matrix.architecture }}
         make -j2
         make install
         

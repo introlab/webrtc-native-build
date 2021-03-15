@@ -46,5 +46,5 @@ jobs:
       - name: Print Release File Name
         run: echo "Release File Name ${{ steps.generate_release_file_name.outputs.release_file_name }}"
         shell: cmd
-      
-      shell: bash
+        
+        

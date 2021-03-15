@@ -5,15 +5,24 @@ Native build of Google's webrtc library.
 
 
 ## Dependencies
+```bash
+apt-get install list all modules...
+```
 
+## Building
 
-
-
+```bash
+mkdir build
+cd build
+cmake ../
+make -j
+# will copy to dist directory
+make install
+```
 
 ## Authors
 
 * Marc-Antoine Maheux (@mamaheux)
-* Cédric Godin (@godced)
 * Dominic Létourneau (@doumdi)
 
 ## License

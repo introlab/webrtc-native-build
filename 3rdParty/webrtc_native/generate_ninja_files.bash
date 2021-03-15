@@ -20,7 +20,7 @@ case "$architecture" in
 		extras=""
 		extra_flags=""
 	;;
-	armhf|armv*)
+	arm32|armhf|armv*)
 		a=arm
 		extras=" arm_float_abi=\"hard\""
 		extra_flags="use_sysroot=true sysroot=\"$sysroot\""

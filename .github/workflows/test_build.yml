@@ -41,6 +41,14 @@ jobs:
             - This is a prerelease, use at your own risks.
         draft: true
         prerelease: true
+        
+    - name: Output Release URL File
+      run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
+    - name: Save Release URL File for publish
+      uses: actions/upload-artifact@v1
+      with:
+        name: release_url
+        path: release_url.txt
 
   build:
     strategy:
@@ -94,11 +102,20 @@ jobs:
         make -j2
         make install
         
-
     - name: Create Archive
       working-directory: dist/${{ matrix.build-type }}
       run : |
         tar cvzf ${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz webrtc-native-build-${{ steps.generate_version_output.outputs.version }}
+        
+    - name: Get Release File Name & Upload URL
+      id: get_release_info
+      run: |
+        echo ::set-output name=file_name::${REPOSITORY_NAME##*/}-${TAG_REF_NAME##*/v} # RepositoryName-v1.0.0
+        value=`cat release_url/release_url.txt`
+        echo ::set-output name=upload_url::$value
+      env:
+        TAG_REF_NAME: ${{ github.ref }}
+        REPOSITORY_NAME: ${{ github.repository }}
         
     - name: Upload Release Asset
       id: upload-release-asset 
@@ -106,13 +123,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ create-release.steps.create_release.outputs.upload_url }}
+        upload_url: ${{ steps.get_release_info.outputs.upload_url }}
         asset_path: dist/${{ matrix.build-type }}/${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz
         asset_name: ${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz
-        asset_content_type: application/x-gzip   
-        
-        
-        
-        
-        
+        asset_content_type: application/x-gzip
+
         

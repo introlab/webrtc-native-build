@@ -1,6 +1,7 @@
 set(WEBRTC_CHECKOUT 742109a89d35d95bba055b036d8dbbe2ebcce6ee)
 
 if(WIN32)
+        set(ENV{PATH} $ENV{PATH};${CMAKE_CURRENT_LIST_DIR}/../depot_tools/)
         list(APPEND CMAKE_PROGRAM_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/")        
         
         message(STATUS "Current PATH: $ENV{PATH}")
@@ -8,7 +9,7 @@ if(WIN32)
         file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/webrtc)
         
         execute_process(
-                COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/fetch.bat webrtc
+                COMMAND fetch webrtc
                 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
                 RESULT_VARIABLE fetch_webrtc_result
         )
@@ -17,7 +18,7 @@ if(WIN32)
         endif()
         
         execute_process(
-                COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/gclient.bat sync --with_branch_heads --with_tags
+                COMMAND gclient sync --with_branch_heads --with_tags
                 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
                 RESULT_VARIABLE gclient_sync_webrtc_result
         )

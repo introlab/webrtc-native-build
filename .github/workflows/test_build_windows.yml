@@ -45,3 +45,16 @@ jobs:
         shell: cmd
         
         
+      - name: Create build directory
+        working-directory: .
+        run: |
+          mkdir build
+        
+      - name: Run CMake and build webrtc-native-build
+        working-directory: build
+        run: |
+          cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type}} -DCMAKE_BUILD_ARCHITECTURE=${{ matrix.architecture }}
+          make -j2
+          make install        
+        
+        

@@ -1,6 +1,28 @@
 set(WEBRTC_CHECKOUT 742109a89d35d95bba055b036d8dbbe2ebcce6ee)
 
+if(WIN32)
 
+        file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/webrtc)
+        
+        execute_process(
+                COMMAND fetch webrtc
+                WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
+                RESULT_VARIABLE fetch_webrtc_result
+        )
+        if(NOT ${fetch_webrtc_result} EQUAL 0)
+            message(FATAL_ERROR "\"fetch webrtc\" failed (${fetch_webrtc_result})")
+        endif()
+        
+        execute_process(
+                COMMAND gclient sync --with_branch_heads --with_tags
+                WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
+                RESULT_VARIABLE gclient_sync_webrtc_result
+        )
+        if(NOT ${gclient_sync_webrtc_result} EQUAL 0)
+            message(FATAL_ERROR "\"gclient sync --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
+        endif()
+        
+else(WIN32)
     set(ENV{PATH} $ENV{PATH}:${CMAKE_CURRENT_LIST_DIR}/../depot_tools/)
 
     if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/webrtc")
@@ -92,51 +114,49 @@ set(WEBRTC_CHECKOUT 742109a89d35d95bba055b036d8dbbe2ebcce6ee)
             webrtc_native ALL
             COMMAND ninja -C ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}
     )
+endif(WIN32)
 
-    # Manual installation of all dependencies.
-    list(GET webrtc_native_LIBRARY 0 webrtc_native_LIBRARY_only)
-    install(FILES ${webrtc_native_LIBRARY_only} DESTINATION lib)
-    install(FILES ${boringssl_LIBRARY} DESTINATION lib)
+# Manual installation of all dependencies.
+list(GET webrtc_native_LIBRARY 0 webrtc_native_LIBRARY_only)
+install(FILES ${webrtc_native_LIBRARY_only} DESTINATION lib)
+install(FILES ${boringssl_LIBRARY} DESTINATION lib)
 
-    install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/boringssl DESTINATION lib)
-    install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/boringssl_asm DESTINATION lib)
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/boringssl DESTINATION lib)
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/boringssl_asm DESTINATION lib)
 
+install(DIRECTORY webrtc/src/api DESTINATION include
+    FILES_MATCHING PATTERN "*.h")
 
-    install(DIRECTORY webrtc/src/api DESTINATION include
-    	FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY webrtc/src/rtc_base DESTINATION include
+    FILES_MATCHING PATTERN "*.h")
 
-    install(DIRECTORY webrtc/src/rtc_base DESTINATION include
-    	FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY webrtc/src/media DESTINATION include
+    FILES_MATCHING PATTERN "*.h")
 
-   install(DIRECTORY webrtc/src/media DESTINATION include
-    	FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY webrtc/src/modules DESTINATION include
+    FILES_MATCHING PATTERN "*.h")
 
-    install(DIRECTORY webrtc/src/modules DESTINATION include
-    	FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY webrtc/src/system_wrappers DESTINATION include
+    FILES_MATCHING PATTERN "*.h")
 
-    install(DIRECTORY webrtc/src/system_wrappers DESTINATION include
-        FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY webrtc/src/common_video DESTINATION include
+    FILES_MATCHING PATTERN "*.h")
 
-    install(DIRECTORY webrtc/src/common_video DESTINATION include
-        FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY webrtc/src/common_audio DESTINATION include
+    FILES_MATCHING PATTERN "*.h")
 
-    install(DIRECTORY webrtc/src/common_audio DESTINATION include
-        FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY webrtc/src/call DESTINATION include
+    FILES_MATCHING PATTERN "*.h")
 
-    install(DIRECTORY webrtc/src/call DESTINATION include
-        FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY webrtc/src/p2p DESTINATION include
+    FILES_MATCHING PATTERN "*.h")
 
-    install(DIRECTORY webrtc/src/p2p DESTINATION include
-        FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY webrtc/src/logging DESTINATION include
+    FILES_MATCHING PATTERN "*.h")
 
-    install(DIRECTORY webrtc/src/logging DESTINATION include
-        FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY webrtc/src/third_party/abseil-cpp/absl DESTINATION include
+    FILES_MATCHING PATTERN "*.h")
 
-    install(DIRECTORY webrtc/src/third_party/abseil-cpp/absl DESTINATION include
-    	FILES_MATCHING PATTERN "*.h")
-
-    install(DIRECTORY webrtc/src/third_party/boringssl/src/include/openssl DESTINATION include
-    	FILES_MATCHING PATTERN "*.h")
-
-
-
+install(DIRECTORY webrtc/src/third_party/boringssl/src/include/openssl DESTINATION include
+    FILES_MATCHING PATTERN "*.h")
+    

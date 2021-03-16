@@ -24,7 +24,8 @@ jobs:
         shell: cmd
         run:   |
           echo "::add-path::C:\msys64\usr\bin"
-     
+          echo "::add-path::D:/a/webrtc-native-build/webrtc-native-build/3rdParty/depot_tools"
+          
       - name: Generate Version Output
         id: generate_version_output
         run: echo ::set-output name=version::$(cat VERSION)

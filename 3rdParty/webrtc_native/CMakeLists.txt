@@ -1,12 +1,12 @@
 set(WEBRTC_CHECKOUT 742109a89d35d95bba055b036d8dbbe2ebcce6ee)
 
 if(WIN32)
-        list(APPEND CMAKE_PROGRAM_PATH  "${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/")        
+        list(APPEND CMAKE_PROGRAM_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/")        
         
         file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/webrtc)
         
         execute_process(
-                COMMAND fetch webrtc
+                COMMAND fetch.bat webrtc
                 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
                 RESULT_VARIABLE fetch_webrtc_result
         )

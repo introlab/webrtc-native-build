@@ -23,7 +23,9 @@ jobs:
       - name:  "add-path"
         shell: cmd
         run:   |
-          echo ::add-path::C:\msys64\usr\bin
+          echo "Adding path!"
+        env:
+          PATH: $PATH;C:\msys64\usr\bin
      
       - name: Generate Version Output
         id: generate_version_output

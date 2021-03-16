@@ -37,10 +37,7 @@ jobs:
       - name: Generate Release File Name
         id: generate_release_file_name
         run: |
-          echo "::set-output name=release_file_name::webrtc-native-build-${{ matrix.os }}-\
-          ${{ matrix.architecture }}-\
-          ${{ matrix.build-type }}-\
-          ${{ steps.generate_version_output.outputs.version }}"
+          echo "::set-output name=release_file_name::webrtc-native-build-${{ matrix.os }}-${{ matrix.architecture }}-${{ matrix.build-type }}-${{ steps.generate_version_output.outputs.version }}"
         shell: cmd
           
       - name: Print Release File Name

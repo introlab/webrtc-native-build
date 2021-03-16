@@ -69,7 +69,7 @@ elseif (UNIX)
 
     if (CMAKE_BUILD_ARCHITECTURE MATCHES arm32)
         execute_process(
-                COMMAND python2 install-sysroot.py --arch=${CMAKE_BUILD_ARCHITECTURE}
+                COMMAND python2 install-sysroot.py --arch=arm
                 WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src/build/linux/sysroot_scripts"
                 RESULT_VARIABLE build_sysroot_architecture
         )

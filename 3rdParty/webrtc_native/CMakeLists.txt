@@ -8,7 +8,7 @@ if(WIN32)
         file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/webrtc)
         
         execute_process(
-                COMMAND fetch.bat webrtc
+                COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/fetch.bat webrtc
                 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
                 RESULT_VARIABLE fetch_webrtc_result
         )

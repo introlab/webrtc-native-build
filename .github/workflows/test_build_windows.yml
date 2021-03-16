@@ -12,7 +12,7 @@ jobs:
         matrix:
           os: [windows-2019]
           architecture: [win64]
-          build-type: [Release, Debug]
+          build-type: [Release]
           
       runs-on: ${{ matrix.os }}
       steps:

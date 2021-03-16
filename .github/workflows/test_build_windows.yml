@@ -26,7 +26,7 @@ jobs:
           echo "::add-path::C:\msys64\usr\bin"
           echo "::add-path::D:/a/webrtc-native-build/webrtc-native-build/3rdParty/depot_tools"
       
-      - name: Read package.json
+      - name: Read VERSION
         id: package
         uses: juliangruber/read-file-action@v1
         with:

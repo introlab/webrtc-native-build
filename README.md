@@ -22,7 +22,7 @@ mkdir build
 # Go to build directory
 cd build
 # Run CMake with arguments
-cmake ../ [-DCMAKE_BUILD_TYPE=Release|Debug] [-DCMAKE_BUILD_ARCHITECTURE=arm64|amd64]
+cmake ../ [-DCMAKE_BUILD_TYPE=Release|Debug] [-DCMAKE_BUILD_ARCHITECTURE=arm32|arm64|amd64|win64]
 # Parallel build
 make -j
 # will copy to dist directory

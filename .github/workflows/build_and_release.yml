@@ -70,15 +70,7 @@ jobs:
         echo "::set-output name=upload_url::$(cat release_url.txt)"
         ls -l
         cat release_url.txt    
-   
-    - name: Upgrade ninja-build
-      if: ${{ matrix.os == 'ubuntu-16.04' }}
-      run: |
-        wget https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip
-        sudo unzip ninja-linux.zip -d /usr/local/bin
-        sudo update-alternatives --install /usr/bin/ninja ninja /usr/local/bin/ninja 1 --force    
-        /usr/bin/ninja --version
-        
+           
     - name: Generate Version Output
       id: generate_version_output
       run: echo "::set-output name=version::$(cat VERSION)"

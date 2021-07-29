@@ -1,10 +1,10 @@
 # webrtc-native-build
 
-Native build of Google's webrtc library. The library is also packaged with BoringSSL.
+Native build of Google's webrtc library. The library is also packaged with BoringSSL and libyuv.
 
 * [WebRTC](https://webrtc.org/) is a standard for real-time audio/video/data communication and is mostly used in web browsers.
 * [BoringSSL](https://github.com/google/boringssl) is a fork of OpenSSL that is designed to meet Google's needs.
-
+* [libyuv](https://chromium.googlesource.com/libyuv/libyuv/) is an open source project that includes YUV scaling and conversion functionalities.
 
 ## Dependencies
 ```bash

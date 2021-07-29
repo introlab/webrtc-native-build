@@ -1,5 +1,5 @@
-set(WEBRTC_CHECKOUT 742109a89d35d95bba055b036d8dbbe2ebcce6ee)
-
+# VERSION MAJOR = 92, MINOR=0, BUILD=4515, PATCH=129
+set(WEBRTC_CHECKOUT 2d3ba08513c21dc7aeeee7dc7220800eb4f0f46d)
 
 if(WIN32)
         
@@ -125,9 +125,11 @@ endif(WIN32)
 list(GET webrtc_native_LIBRARY 0 webrtc_native_LIBRARY_only)
 install(FILES ${webrtc_native_LIBRARY_only} DESTINATION lib)
 install(FILES ${boringssl_LIBRARY} DESTINATION lib)
+install(FILES ${libyuv_LIBRARY} DESTINATION lib)
 
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/boringssl DESTINATION lib)
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/boringssl_asm DESTINATION lib)
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libyuv/libyuv_internal DESTINATION lib)
 
 install(DIRECTORY webrtc/src/api DESTINATION include
     FILES_MATCHING PATTERN "*.h")
@@ -164,4 +166,8 @@ install(DIRECTORY webrtc/src/third_party/abseil-cpp/absl DESTINATION include
 
 install(DIRECTORY webrtc/src/third_party/boringssl/src/include/openssl DESTINATION include
     FILES_MATCHING PATTERN "*.h")
-    
+
+install(FILES webrtc/src/third_party/libyuv/include/libyuv.h DESTINATION include)
+install(DIRECTORY webrtc/src/third_party/libyuv/include/libyuv DESTINATION include
+    FILES_MATCHING PATTERN "*.h")
+

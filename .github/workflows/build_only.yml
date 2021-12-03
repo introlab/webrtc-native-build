@@ -1,0 +1,112 @@
+# This workflow will create a release and build multiple versions of the webrtc library.
+name: build_only
+
+on:
+  workflow_dispatch:
+    branches: [ main ]
+
+jobs:
+
+  create-release:
+    runs-on: ubuntu-20.04
+    
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    
+    - name: Generate Version Output
+      id: generate_version_output
+      run: echo "::set-output name=version::$(cat VERSION)"
+      shell: bash
+        
+    - name: Print Version Information
+      run: echo "Version ${{ steps.generate_version_output.outputs.version }}"
+      shell: bash
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ steps.generate_version_output.outputs.version }}
+        release_name: webrtc-native-build-${{ steps.generate_version_output.outputs.version }}
+        body: |
+            Latest build of webrtc-native-build
+            - This is a prerelease, use at your own risks.
+        draft: true
+        prerelease: true
+        
+    - name: Output Release URL File
+      run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
+    - name: Save Release URL File for publish
+      uses: actions/upload-artifact@v2
+      with:
+        name: release_url
+        path: release_url.txt
+
+  build:
+    needs: create-release
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-20.04]
+        architecture: [arm32, arm64, amd64]
+        build-type: [Release, Debug]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+   
+    - uses: actions/download-artifact@v2
+      with:
+        name: release_url
+    
+    - name: Get Upload URL
+      id: get_release_info
+      run: |
+        echo "::set-output name=upload_url::$(cat release_url.txt)"
+        ls -l
+        cat release_url.txt    
+           
+    - name: Generate Version Output
+      id: generate_version_output
+      run: echo "::set-output name=version::$(cat VERSION)"
+      shell: bash
+        
+    - name: Print Version Information
+      run: echo "Version ${{ steps.generate_version_output.outputs.version }}"
+      shell: bash
+   
+    - name: Generate Release File Name
+      id: generate_release_file_name
+      run: |
+        echo "::set-output name=release_file_name::webrtc-native-build-${{ matrix.os }}-\
+        ${{ matrix.architecture }}-\
+        ${{ matrix.build-type }}-\
+        ${{ steps.generate_version_output.outputs.version }}"
+          
+    - name: Print Release File Name
+      run: echo "Release File Name ${{ steps.generate_release_file_name.outputs.release_file_name }}"
+      shell: bash
+       
+    - name: Install system dependencies
+      run: | 
+        sudo apt-get install ninja-build cmake build-essential libssl-dev libboost-all-dev 
+        sudo apt-get install libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev 
+        sudo apt-get install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
+        sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+    - name: Create build directory
+      working-directory: .
+      run: |
+        mkdir build
+        
+    - name: Run CMake and build webrtc-native-build
+      working-directory: build
+      run: |
+        cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type}} -DCMAKE_BUILD_ARCHITECTURE=${{ matrix.architecture }}
+        make -j2
+        make install
+

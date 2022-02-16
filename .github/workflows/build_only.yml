@@ -107,3 +107,4 @@ jobs:
         cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type}} -DCMAKE_BUILD_ARCHITECTURE=${{ matrix.architecture }}
         make -j3
         make install
+

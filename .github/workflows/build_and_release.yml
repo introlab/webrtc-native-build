@@ -31,7 +31,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
         tag_name: ${{ steps.generate_version_output.outputs.version }}
-        release_name: webrtc-native-build-${{ steps.generate_version_output.outputs.version }}
+        release_name: webrtc-native-build-${{ steps.generate_version_output.outputs.version }}-temp
         body: |
             Latest build of webrtc-native-build
             - This is a prerelease, use at your own risks.

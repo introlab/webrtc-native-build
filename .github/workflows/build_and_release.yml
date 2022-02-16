@@ -46,7 +46,7 @@ jobs:
         name: release_url
         path: release_url.txt
 
-  build:
+  build-linux:
     needs: create-release
     strategy:
       matrix:
@@ -128,4 +128,69 @@ jobs:
         asset_name: ${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz
         asset_content_type: application/x-gzip
 
+  build-mac:
+    needs: create-release
+    strategy:
+      matrix:
+        os: [macos-10.15]
+        architecture: [osx64]
+        build-type: [Release, Debug]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+           
+    - name: Generate Version Output
+      id: generate_version_output
+      run: echo "::set-output name=version::$(cat VERSION)"
+      shell: bash
         
+    - name: Print Version Information
+      run: echo "Version ${{ steps.generate_version_output.outputs.version }}"
+      shell: bash
+   
+    - name: Generate Release File Name
+      id: generate_release_file_name
+      run: |
+        echo "::set-output name=release_file_name::webrtc-native-build-${{ matrix.os }}-\
+        ${{ matrix.architecture }}-\
+        ${{ matrix.build-type }}-\
+        ${{ steps.generate_version_output.outputs.version }}"
+          
+    - name: Print Release File Name
+      run: echo "Release File Name ${{ steps.generate_release_file_name.outputs.release_file_name }}"
+      shell: bash
+       
+    - name: Install system dependencies
+      run: |
+        brew install ninja
+    - name: Create build directory
+      working-directory: .
+      run: |
+        mkdir build
+        
+    - name: Run CMake and build webrtc-native-build
+      working-directory: build
+      run: |
+        cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type}} -DCMAKE_BUILD_ARCHITECTURE=${{ matrix.architecture }}
+        make -j3
+        make install
+        
+    - name: Create Archive
+      working-directory: dist/${{ matrix.build-type }}
+      run : |
+        tar cvzf ${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz webrtc-native-build-${{ steps.generate_version_output.outputs.version }}
+        
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.get_release_info.outputs.upload_url }}
+        asset_path: dist/${{ matrix.build-type }}/${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz
+        asset_name: ${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz
+        asset_content_type: application/x-gzip
+

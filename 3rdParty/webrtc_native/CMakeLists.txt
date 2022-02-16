@@ -26,7 +26,6 @@ if(WIN32)
         if(NOT ${gclient_sync_webrtc_result} EQUAL 0)
             message(FATAL_ERROR "\"gclient sync --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
         endif()
-        
 else(WIN32)
     set(ENV{PATH} $ENV{PATH}:${CMAKE_CURRENT_LIST_DIR}/../depot_tools/)
 

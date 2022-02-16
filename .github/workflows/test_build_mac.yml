@@ -1,5 +1,5 @@
-# This workflow will create a release and build multiple versions of the webrtc library.
-name: build_only
+# This workflow will build libwebrtc for the Mac.
+name: test_build_mac
 
 on:
   workflow_dispatch:

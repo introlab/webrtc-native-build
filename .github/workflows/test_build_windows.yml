@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-  build:
+  build-windows:
       strategy:
         matrix:
           os: [windows-2019]

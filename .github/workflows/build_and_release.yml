@@ -141,6 +141,10 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
+
+    - uses: actions/download-artifact@v2
+      with:
+        name: release_url
  
     - name: Get Upload URL
       id: get_release_info

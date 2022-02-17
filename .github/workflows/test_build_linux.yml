@@ -1,5 +1,5 @@
 # This workflow will create a release and build multiple versions of the webrtc library.
-name: build_only_linux
+name: test_build_linux
 
 on:
   workflow_dispatch:

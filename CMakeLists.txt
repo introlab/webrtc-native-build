@@ -26,7 +26,12 @@ elseif (CMAKE_BUILD_ARCHITECTURE MATCHES win64)
     message(STATUS "Windows build not fully supported yet.")
 else()
     # Will use native compiler
-    set(CMAKE_BUILD_ARCHITECTURE amd64)
+    if (APPLE)
+	set(CMAKE_BUILD_ARCHITECTURE osx64)
+    else()
+	set(CMAKE_BUILD_ARCHITECTURE amd64)
+    endif()
+
     # set(CMAKE_SYSROOT ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/webrtc_native/webrtc/src/build/linux/debian_sid_amd64-sysroot)
 endif()
 

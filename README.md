@@ -6,12 +6,18 @@ Native build of Google's webrtc library. The library is also packaged with Borin
 * [BoringSSL](https://github.com/google/boringssl) is a fork of OpenSSL that is designed to meet Google's needs.
 * [libyuv](https://chromium.googlesource.com/libyuv/libyuv/) is an open source project that includes YUV scaling and conversion functionalities.
 
-## Dependencies
+## Dependencies (Linux)
 ```bash
 sudo apt-get install ninja-build cmake build-essential libssl-dev libboost-all-dev 
 sudo apt-get install libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev 
 sudo apt-get install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
 sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+```
+
+## Dependencies (Mac)
+```bash
+# XCode and homebrew must be installed first.
+brew install ninja
 ```
 
 ## Building
@@ -22,7 +28,7 @@ mkdir build
 # Go to build directory
 cd build
 # Run CMake with arguments
-cmake ../ [-DCMAKE_BUILD_TYPE=Release|Debug] [-DCMAKE_BUILD_ARCHITECTURE=arm32|arm64|amd64|win64]
+cmake ../ [-DCMAKE_BUILD_TYPE=Release|Debug] [-DCMAKE_BUILD_ARCHITECTURE=arm32|arm64|amd64|win64|osx64]
 # Parallel build
 make -j
 # will copy to dist directory

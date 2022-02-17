@@ -6,10 +6,10 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-mac:
     strategy:
       matrix:
-        os: [macos-10.15]
+        os: [macos-11, macos-10.15]
         architecture: [osx64]
         build-type: [Release, Debug]
 
@@ -52,6 +52,6 @@ jobs:
       working-directory: build
       run: |
         cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type}} -DCMAKE_BUILD_ARCHITECTURE=${{ matrix.architecture }}
-        make -j2
+        make -j3
         make install
 

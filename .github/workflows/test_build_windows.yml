@@ -7,12 +7,12 @@ on:
 
 jobs:
 
-  build:
+  build-windows:
       strategy:
         matrix:
           os: [windows-2019]
           architecture: [win64]
-          build-type: [Release]
+          build-type: [Release, Debug]
           
       runs-on: ${{ matrix.os }}
       steps:
@@ -60,7 +60,7 @@ jobs:
       - name: Run CMake and build webrtc-native-build
         working-directory: build
         run: |
-          cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type}} -DCMAKE_BUILD_ARCHITECTURE=${{ matrix.architecture }}
+          cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_BUILD_ARCHITECTURE=${{ matrix.architecture }}
           make -j2
           make install        
         

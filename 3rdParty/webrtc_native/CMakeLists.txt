@@ -10,21 +10,21 @@ if(WIN32)
         file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/webrtc)
         
         execute_process(
-                COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/fetch.bat webrtc
+                COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/fetch.bat --no-history webrtc
                 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
                 RESULT_VARIABLE fetch_webrtc_result
         )
         if(NOT ${fetch_webrtc_result} EQUAL 0)
-            message(FATAL_ERROR "\"fetch webrtc\" failed (${fetch_webrtc_result})")
+            message(FATAL_ERROR "\"fetch --no-history webrtc\" failed (${fetch_webrtc_result})")
         endif()
         
         execute_process(
-                COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/gclient.bat sync --with_branch_heads --with_tags
+                COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/gclient.bat sync --no-history --with_branch_heads --with_tags
                 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
                 RESULT_VARIABLE gclient_sync_webrtc_result
         )
         if(NOT ${gclient_sync_webrtc_result} EQUAL 0)
-            message(FATAL_ERROR "\"gclient sync --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
+            message(FATAL_ERROR "\"gclient sync --no-history --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
         endif()
 else(WIN32)
     set(ENV{PATH} $ENV{PATH}:${CMAKE_CURRENT_LIST_DIR}/../depot_tools/)
@@ -42,21 +42,21 @@ else(WIN32)
 
     if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/webrtc/src")
         execute_process(
-                COMMAND fetch webrtc
+                COMMAND fetch --no-history webrtc
                 WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
                 RESULT_VARIABLE fetch_webrtc_result
         )
         if(NOT ${fetch_webrtc_result} EQUAL 0)
-            message(FATAL_ERROR "\"fetch webrtc\" failed (${fetch_webrtc_result})")
+            message(FATAL_ERROR "\"fetch --no-history webrtc\" failed (${fetch_webrtc_result})")
         endif()
 
         execute_process(
-                COMMAND gclient sync --with_branch_heads --with_tags
+                COMMAND gclient sync --no-history --with_branch_heads --with_tags
                 WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
                 RESULT_VARIABLE gclient_sync_webrtc_result
         )
         if(NOT ${gclient_sync_webrtc_result} EQUAL 0)
-            message(FATAL_ERROR "\"gclient sync --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
+            message(FATAL_ERROR "\"gclient sync --no-history --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
         endif()
 
         execute_process(
@@ -69,12 +69,12 @@ else(WIN32)
         endif()
 
         execute_process(
-                COMMAND gclient sync --with_branch_heads --with_tags
+                COMMAND gclient sync --no-history --with_branch_heads --with_tags
                 WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
                 RESULT_VARIABLE gclient_sync_webrtc_result
         )
         if(NOT ${gclient_sync_webrtc_result} EQUAL 0)
-            message(FATAL_ERROR "\"gclient sync --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
+            message(FATAL_ERROR "\"gclient sync --no-history --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
         endif()
     endif()
 

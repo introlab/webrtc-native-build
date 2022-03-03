@@ -10,12 +10,12 @@ if(WIN32)
         file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/webrtc)
         
         execute_process(
-                COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/fetch.bat --no-history webrtc
+                COMMAND echo y | ${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/fetch.bat --nohooks --no-history webrtc
                 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
                 RESULT_VARIABLE fetch_webrtc_result
         )
         if(NOT ${fetch_webrtc_result} EQUAL 0)
-            message(FATAL_ERROR "\"fetch --no-history webrtc\" failed (${fetch_webrtc_result})")
+            message(FATAL_ERROR "\"fetch --nohooks --no-history webrtc\" failed (${fetch_webrtc_result})")
         endif()
         
         execute_process(

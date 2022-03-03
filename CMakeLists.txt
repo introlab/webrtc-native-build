@@ -24,6 +24,7 @@ elseif (CMAKE_BUILD_ARCHITECTURE MATCHES arm32)
     set(CMAKE_CXX_COMPILER /usr/bin/arm-linux-gnueabihf-g++)
 elseif (CMAKE_BUILD_ARCHITECTURE MATCHES win64)
     set(DEPOT_TOOLS_WIN_TOOLCHAIN OFF)
+    set(GYP_MSVS_VERSION 2019)
     message(STATUS "Windows build not fully supported yet.")
 else()
     # Will use native compiler

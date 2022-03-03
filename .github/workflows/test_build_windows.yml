@@ -3,76 +3,66 @@ name: test_build_windows
 
 on:
   workflow_dispatch:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-
   build-windows:
-      strategy:
-        matrix:
-          os: [windows-2019]
-          architecture: [win64]
-          build-type: [Release, Debug]
-          
-      runs-on: ${{ matrix.os }}
-      steps:
+    strategy:
+      matrix:
+        os: [windows-2019]
+        architecture: [win64]
+        build-type: [Release, Debug]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Cleanup Disk
+        uses: curoky/cleanup-disk-action@v2.0
+        with:
+          retain: "python"
+
       - uses: actions/checkout@v2
         with:
           submodules: recursive
-          
-      - name: Disk Cleanup
-        run: |
-            Get-PSDrive
-            docker rmi $(docker images -q -a)
-            Remove-Item -Recurse -Force $Env:ANDROID_HOME
-            Remove-Item -Recurse -Force $Env:ANDROID_NDK_HOME
-            Remove-Item -Recurse -Force $Env:JAVA_HOME_11_X64
-            Remove-Item -Recurse -Force $Env:JAVA_HOME_8_X64
-            Remove-Item -Recurse -Force $Env:JAVA_HOME_7_X64
-            Get-PSDrive
-        shell: powershell
-        
-      - name:  "add-path"
+
+      - name: "add-path"
         shell: cmd
-        run:   |
+        run: |
           echo "::add-path::C:\msys64\usr\bin"
           echo "::add-path::D:/a/webrtc-native-build/webrtc-native-build/3rdParty/depot_tools"
-      
+
       - name: Read VERSION
         id: package
         uses: juliangruber/read-file-action@v1
         with:
           path: ./VERSION
-          
+
       - name: Generate Version Output
         id: generate_version_output
         run: echo ::set-output name=version::${{ steps.package.outputs.content }}
         shell: cmd
-        
+
       - name: Print Version Information
         run: echo "Version ${{ steps.generate_version_output.outputs.version }}"
         shell: cmd
-   
+
       - name: Generate Release File Name
         id: generate_release_file_name
         run: |
           echo "::set-output name=release_file_name::webrtc-native-build-${{ matrix.os }}-${{ matrix.architecture }}-${{ matrix.build-type }}-${{ steps.generate_version_output.outputs.version }}"
         shell: cmd
-          
+
       - name: Print Release File Name
         run: echo "Release File Name ${{ steps.generate_release_file_name.outputs.release_file_name }}"
         shell: cmd
-        
+
       - name: Create build directory
         working-directory: .
         run: |
           mkdir build
-        
+
       - name: Run CMake and build webrtc-native-build
         working-directory: build
         run: |
           cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_BUILD_ARCHITECTURE=${{ matrix.architecture }}
           make -j2
-          make install        
-        
-        
+          make install

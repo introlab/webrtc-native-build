@@ -15,11 +15,6 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Cleanup Disk
-        uses: curoky/cleanup-disk-action@v2.0
-        with:
-          retain: "python"
-
       - uses: actions/checkout@v2
         with:
           submodules: recursive

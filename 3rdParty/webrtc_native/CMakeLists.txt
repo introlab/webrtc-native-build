@@ -48,7 +48,7 @@ if(WIN32)
         endif()
 
         execute_process(
-            COMMAND ${CMAKE_COMMAND} -DARCHITECTURE="${CMAKE_BUILD_ARCHITECTURE}" -DSYSROOT="${CMAKE_SYSROOT}" -DGN_CMD="${${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/gn.bat}" -P ${CMAKE_CURRENT_SOURCE_DIR}/generate_ninja_files.cmake
+            COMMAND ${CMAKE_COMMAND} -E env DEPOT_TOOLS_WIN_TOOLCHAIN=0 ${CMAKE_COMMAND} -DARCHITECTURE=${CMAKE_BUILD_ARCHITECTURE} -DSYSROOT=${CMAKE_SYSROOT} -DGN_CMD="${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/gn.bat" -P ${CMAKE_CURRENT_SOURCE_DIR}/generate_ninja_files.cmake
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc/src"
             RESULT_VARIABLE generate_ninja_files_result
         )
@@ -58,7 +58,7 @@ if(WIN32)
 
         add_custom_target(
                 webrtc_native ALL
-                COMMAND ninja -C ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}
+                COMMAND COMMAND ${CMAKE_COMMAND} -E env DEPOT_TOOLS_WIN_TOOLCHAIN=0 ninja -C ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}
         )
 
 else(WIN32)
@@ -141,7 +141,7 @@ else(WIN32)
 
 
     execute_process(
-            COMMAND ${CMAKE_COMMAND} -DARCHITECTURE="${CMAKE_BUILD_ARCHITECTURE}" -DSYSROOT="${CMAKE_SYSROOT}" -P ${CMAKE_CURRENT_SOURCE_DIR}/generate_ninja_files.cmake
+            COMMAND ${CMAKE_COMMAND} -DARCHITECTURE=${CMAKE_BUILD_ARCHITECTURE} -DSYSROOT=${CMAKE_SYSROOT} -P ${CMAKE_CURRENT_SOURCE_DIR}/generate_ninja_files.cmake
             WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src"
             RESULT_VARIABLE generate_ninja_files_result
     )

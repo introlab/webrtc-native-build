@@ -15,7 +15,9 @@ set args=is_component_build=false^
          enable_iterator_debugging=false^
          rtc_build_examples=false^
          rtc_use_pipewire=false^
-         is_clang=false^
+         is_clang=true^
+         use_lld=false^
+         use_custom_libcxx=false^
          target_os=\"win\"
 
 call "..\..\..\depot_tools\gn.bat" gen out\Release --args="is_debug=false %args%"

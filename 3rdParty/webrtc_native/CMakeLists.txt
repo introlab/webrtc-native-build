@@ -48,7 +48,7 @@ if(WIN32)
         endif()
 
         execute_process(
-            COMMAND ${CMAKE_COMMAND} -DARCHITECTURE="${CMAKE_BUILD_ARCHITECTURE}" -DSYSROOT="${CMAKE_SYSROOT}" -P ${CMAKE_CURRENT_SOURCE_DIR}/generate_ninja_files.cmake
+            COMMAND ${CMAKE_COMMAND} -DARCHITECTURE="${CMAKE_BUILD_ARCHITECTURE}" -DSYSROOT="${CMAKE_SYSROOT}" -DGN_CMD="${${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/gn.bat}" -P ${CMAKE_CURRENT_SOURCE_DIR}/generate_ninja_files.cmake
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc/src"
             RESULT_VARIABLE generate_ninja_files_result
         )

@@ -15,6 +15,10 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Cleanup docker
+        run: docker rmi $(docker images -q -a)
+        shell: powershell
+
       - uses: actions/checkout@v2
         with:
           submodules: recursive

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(webrtc-native-build)
+project(webrtc-native-build NONE)
 
 
 # Verify build architecture
@@ -23,11 +23,13 @@ elseif (CMAKE_BUILD_ARCHITECTURE MATCHES arm32)
     set(CMAKE_C_COMPILER /usr/bin/arm-linux-gnueabihf-gcc)
     set(CMAKE_CXX_COMPILER /usr/bin/arm-linux-gnueabihf-g++)
 elseif (CMAKE_BUILD_ARCHITECTURE MATCHES win64)
-    message(STATUS "Windows build not fully supported yet.")
+    # Nothing to do
 else()
     # Will use native compiler
     if (APPLE)
         set(CMAKE_BUILD_ARCHITECTURE osx64)
+    elseif(WIN32)
+        set(CMAKE_BUILD_ARCHITECTURE win64)
     else()
         set(CMAKE_BUILD_ARCHITECTURE amd64)
     endif()
@@ -102,9 +104,13 @@ if (WIN32)
     # set(CMAKE_CXX_FLAGS "-fPIC")
     # add_definitions(-DWEBRTC_POSIX)
     list(APPEND boringssl_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/3rdParty/webrtc_native/webrtc/src/third_party/boringssl/src/include")
-    list(APPEND webrtc_native_LIBRARY "${CMAKE_CURRENT_LIST_DIR}/3rdParty/webrtc_native/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/libwebrtc.lib")
-    list(APPEND boringssl_LIBRARY "${CMAKE_CURRENT_LIST_DIR}/3rdParty/webrtc_native/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/libboringssl.lib")
+    list(APPEND webrtc_native_LIBRARY "${CMAKE_CURRENT_LIST_DIR}/3rdParty/webrtc_native/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/webrtc.lib")
+    list(APPEND boringssl_LIBRARY "${CMAKE_CURRENT_LIST_DIR}/3rdParty/webrtc_native/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/boringssl.lib")
     list(APPEND libyuv_LIBRARY "${CMAKE_CURRENT_LIST_DIR}/3rdParty/webrtc_native/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libyuv/libyuv_internal.lib")
+
+    set(CPACK_PACKAGE_FILE_NAME ${CMAKE_PROJECT_NAME}-windows-10-win64-${CMAKE_BUILD_TYPE}-${WEBRTC_NATIVE_BUILD_VERSION})
+    set(CPACK_GENERATOR "ZIP")
+    include(CPack)
 elseif (UNIX)
     set(CMAKE_CXX_FLAGS "-fPIC")
     add_definitions(-DWEBRTC_POSIX)

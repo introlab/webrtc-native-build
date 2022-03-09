@@ -58,7 +58,7 @@ if(WIN32)
 
         add_custom_target(
             webrtc_native ALL
-            COMMAND COMMAND ${CMAKE_COMMAND} -E env DEPOT_TOOLS_WIN_TOOLCHAIN=0 ninja -C ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}
+            COMMAND ${CMAKE_COMMAND} -E env DEPOT_TOOLS_WIN_TOOLCHAIN=0 ninja -C ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}
         )
 
 else(WIN32)

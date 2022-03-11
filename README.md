@@ -77,6 +77,33 @@ ninja package
 * You might have trouble building if your system is not in English
 * You might have trouble building if the full path to `python.exe` has at least one space in it
 
+### Consuming the library
+On Windows, you will have to link any target that consumes this library to these additional Windows libraries:
+* `secur32`
+* `winmm`
+* `dmoguids`
+* `wmcodecdspuuid`
+* `msdmo`
+* `strmiids`
+
+
+If you don't link against these libraries, your linker might see missing symbols like these ones:
+* `__imp_timeGetTime`
+* `__imp_timeKillEvent`
+* `__imp_timeSetEvent`
+* `__imp_timeBeginPeriod`
+* `__imp_timeEndPeriod`
+* `CLSID_CWMAudioAEC`
+* `IID_IMediaObject`
+* `IID_IMediaBuffer`
+* `MoInitMediaType`
+* `MoFreeMediaType`
+* `InitializeSecurityContextA`
+* `AcquireCredentialsHandleA`
+* `__imp_FreeCredentialsHandle`
+* `CompleteAuthToken`
+* `__imp_DeleteSecurityContext`
+
 ## Versioning Scheme
 `branch-head-number`.`commit-hash`.`patch-number`
 
@@ -84,6 +111,7 @@ ninja package
 
 * Marc-Antoine Maheux (@mamaheux)
 * Dominic Létourneau (@doumdi)
+* Philippe Warren (@philippewarren)
 
 ## License
 

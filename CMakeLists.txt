@@ -108,7 +108,7 @@ if (WIN32)
     list(APPEND boringssl_LIBRARY "${CMAKE_CURRENT_LIST_DIR}/3rdParty/webrtc_native/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/boringssl.lib")
     list(APPEND libyuv_LIBRARY "${CMAKE_CURRENT_LIST_DIR}/3rdParty/webrtc_native/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libyuv/libyuv_internal.lib")
 
-    set(CPACK_PACKAGE_FILE_NAME ${CMAKE_PROJECT_NAME}-windows-10-win64-${CMAKE_BUILD_TYPE}-${WEBRTC_NATIVE_BUILD_VERSION})
+    set(CPACK_PACKAGE_FILE_NAME ${CMAKE_PROJECT_NAME}-msvc-2019-win64-${CMAKE_BUILD_TYPE}-${WEBRTC_NATIVE_BUILD_VERSION})
     set(CPACK_GENERATOR "ZIP")
     include(CPack)
 elseif (UNIX)

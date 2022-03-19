@@ -2,38 +2,73 @@
 set(WEBRTC_CHECKOUT e7d9f74b256605556726c64dacd518a105ba872f)
 
 if(WIN32)
-        
-        list(APPEND CMAKE_PROGRAM_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/")        
-        
+
+        list(APPEND CMAKE_PROGRAM_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/")
+
         message(STATUS "Current PATH: $ENV{PATH}")
-        
+
         file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/webrtc)
-        
-        execute_process(
-                COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/fetch.bat webrtc
+
+        if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/webrtc/src")
+            execute_process(
+                COMMAND ${CMAKE_COMMAND} -E env DEPOT_TOOLS_WIN_TOOLCHAIN=0 ${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/fetch.bat webrtc
                 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
                 RESULT_VARIABLE fetch_webrtc_result
-        )
-        if(NOT ${fetch_webrtc_result} EQUAL 0)
-            message(FATAL_ERROR "\"fetch webrtc\" failed (${fetch_webrtc_result})")
-        endif()
-        
-        execute_process(
-                COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/gclient.bat sync --with_branch_heads --with_tags
+            )
+            if(NOT ${fetch_webrtc_result} EQUAL 0)
+                message(FATAL_ERROR "\"fetch webrtc\" failed (${fetch_webrtc_result})")
+            endif()
+
+            execute_process(
+                COMMAND ${CMAKE_COMMAND} -E env DEPOT_TOOLS_WIN_TOOLCHAIN=0 ${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/gclient.bat sync --with_branch_heads --with_tags
                 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
                 RESULT_VARIABLE gclient_sync_webrtc_result
-        )
-        if(NOT ${gclient_sync_webrtc_result} EQUAL 0)
-            message(FATAL_ERROR "\"gclient sync --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
+            )
+            if(NOT ${gclient_sync_webrtc_result} EQUAL 0)
+                message(FATAL_ERROR "\"gclient sync --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
+            endif()
+
+            execute_process(
+                COMMAND git checkout ${WEBRTC_CHECKOUT}
+                WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc/src"
+                RESULT_VARIABLE git_checkout_webrtc_result
+            )
+            if(NOT ${git_checkout_webrtc_result} EQUAL 0)
+                message(FATAL_ERROR "\"git checkout\" failed (${git_checkout_webrtc_result})")
+            endif()
+
+            execute_process(
+                COMMAND ${CMAKE_COMMAND} -E env DEPOT_TOOLS_WIN_TOOLCHAIN=0 ${CMAKE_CURRENT_SOURCE_DIR}/../depot_tools/gclient.bat sync --with_branch_heads --with_tags
+                WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc"
+                RESULT_VARIABLE gclient_sync_webrtc_result
+            )
+            if(NOT ${gclient_sync_webrtc_result} EQUAL 0)
+                message(FATAL_ERROR "\"gclient sync --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
+            endif()
         endif()
+
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} -E env DEPOT_TOOLS_WIN_TOOLCHAIN=0 "${CMAKE_CURRENT_SOURCE_DIR}/generate_ninja_files.bat"
+            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/webrtc/src"
+            RESULT_VARIABLE generate_ninja_files_result
+        )
+        if(NOT ${generate_ninja_files_result} EQUAL 0)
+            message(FATAL_ERROR "\"generate_ninja_files.cmake\" failed (${generate_ninja_files_result})")
+        endif()
+
+        add_custom_target(
+            webrtc_native ALL
+            COMMAND ${CMAKE_COMMAND} -E env DEPOT_TOOLS_WIN_TOOLCHAIN=0 ninja -C ${CMAKE_CURRENT_SOURCE_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}
+        )
+
 else(WIN32)
     set(ENV{PATH} $ENV{PATH}:${CMAKE_CURRENT_LIST_DIR}/../depot_tools/)
 
     if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/webrtc")
         execute_process(
-                COMMAND mkdir webrtc
-                WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
-                RESULT_VARIABLE mkdir_webrtc_result
+            COMMAND mkdir webrtc
+            WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+            RESULT_VARIABLE mkdir_webrtc_result
         )
         if(NOT ${mkdir_webrtc_result} EQUAL 0)
             message(FATAL_ERROR "\"mkdir webrtc\" failed (${mkdir_webrtc_result})")
@@ -42,36 +77,36 @@ else(WIN32)
 
     if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/webrtc/src")
         execute_process(
-                COMMAND fetch webrtc
-                WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
-                RESULT_VARIABLE fetch_webrtc_result
+            COMMAND fetch webrtc
+            WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
+            RESULT_VARIABLE fetch_webrtc_result
         )
         if(NOT ${fetch_webrtc_result} EQUAL 0)
             message(FATAL_ERROR "\"fetch webrtc\" failed (${fetch_webrtc_result})")
         endif()
 
         execute_process(
-                COMMAND gclient sync --with_branch_heads --with_tags
-                WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
-                RESULT_VARIABLE gclient_sync_webrtc_result
+            COMMAND gclient sync --with_branch_heads --with_tags
+            WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
+            RESULT_VARIABLE gclient_sync_webrtc_result
         )
         if(NOT ${gclient_sync_webrtc_result} EQUAL 0)
             message(FATAL_ERROR "\"gclient sync --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
         endif()
 
         execute_process(
-                COMMAND git checkout ${WEBRTC_CHECKOUT}
-                WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src"
-                RESULT_VARIABLE git_checkout_webrtc_result
+            COMMAND git checkout ${WEBRTC_CHECKOUT}
+            WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src"
+            RESULT_VARIABLE git_checkout_webrtc_result
         )
         if(NOT ${git_checkout_webrtc_result} EQUAL 0)
             message(FATAL_ERROR "\"git checkout\" failed (${git_checkout_webrtc_result})")
         endif()
 
         execute_process(
-                COMMAND gclient sync --with_branch_heads --with_tags
-                WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
-                RESULT_VARIABLE gclient_sync_webrtc_result
+            COMMAND gclient sync --with_branch_heads --with_tags
+            WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
+            RESULT_VARIABLE gclient_sync_webrtc_result
         )
         if(NOT ${gclient_sync_webrtc_result} EQUAL 0)
             message(FATAL_ERROR "\"gclient sync --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
@@ -81,11 +116,11 @@ else(WIN32)
 
     if (CMAKE_BUILD_ARCHITECTURE MATCHES arm64)
         execute_process(
-                COMMAND python2 install-sysroot.py --arch=${CMAKE_BUILD_ARCHITECTURE}
-                WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src/build/linux/sysroot_scripts"
-                RESULT_VARIABLE build_sysroot_architecture
+            COMMAND python2 install-sysroot.py --arch=${CMAKE_BUILD_ARCHITECTURE}
+            WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src/build/linux/sysroot_scripts"
+            RESULT_VARIABLE build_sysroot_architecture
         )
-            
+
         if(NOT ${build_sysroot_architecture} EQUAL 0)
             message(FATAL_ERROR "\"python install-sysroot.py --arch=arm64\" failed (${build_sysroot_architecture})")
         endif()
@@ -98,7 +133,7 @@ else(WIN32)
                 WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src/build/linux/sysroot_scripts"
                 RESULT_VARIABLE build_sysroot_architecture
         )
-            
+
         if(NOT ${build_sysroot_architecture} EQUAL 0)
             message(FATAL_ERROR "\"python install-sysroot.py --arch=arm\" failed (${build_sysroot_architecture})")
         endif()
@@ -106,12 +141,12 @@ else(WIN32)
 
 
     execute_process(
-            COMMAND "${CMAKE_CURRENT_LIST_DIR}/generate_ninja_files.bash" "${CMAKE_BUILD_ARCHITECTURE}" "${CMAKE_SYSROOT}"
-            WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src"
-            RESULT_VARIABLE generate_ninja_files_result
+        COMMAND "${CMAKE_CURRENT_LIST_DIR}/generate_ninja_files.bash" "${CMAKE_BUILD_ARCHITECTURE}" "${CMAKE_SYSROOT}"
+        WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src"
+        RESULT_VARIABLE generate_ninja_files_result
     )
     if(NOT ${generate_ninja_files_result} EQUAL 0)
-        message(FATAL_ERROR "\"generate_ninja_files.bash\" failed (${generate_ninja_files_result})")
+        message(FATAL_ERROR "\"generate_ninja_files.cmake\" failed (${generate_ninja_files_result})")
     endif()
 
     add_custom_target(
@@ -169,4 +204,3 @@ install(DIRECTORY webrtc/src/third_party/boringssl/src/include/openssl DESTINATI
 install(FILES webrtc/src/third_party/libyuv/include/libyuv.h DESTINATION include)
 install(DIRECTORY webrtc/src/third_party/libyuv/include/libyuv DESTINATION include
     FILES_MATCHING PATTERN "*.h")
-

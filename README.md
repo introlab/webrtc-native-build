@@ -8,8 +8,8 @@ Native build of Google's webrtc library. The library is also packaged with Borin
 
 ## Dependencies (Linux)
 ```bash
-sudo apt-get install ninja-build cmake build-essential libssl-dev libboost-all-dev 
-sudo apt-get install libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev 
+sudo apt-get install ninja-build cmake build-essential libssl-dev libboost-all-dev
+sudo apt-get install libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev
 sudo apt-get install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
 sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
 ```
@@ -35,6 +35,75 @@ make -j
 make install
 ```
 
+## Building on Windows
+### Dependencies
+* [Ninja](https://github.com/ninja-build/ninja/releases)
+    * Copy `ninja.exe` in `3rdParty/webrtc_native/`
+* [CMake](https://cmake.org/download)
+* [Git](https://git-scm.com/download/win)
+* [Python](https://www.python.org/downloads)
+* [MSVC 2019 Build Tools](https://visualstudio.microsoft.com/vs/older-downloads/#visual-studio-2019-and-other-products)
+* Windows SDK 10.1.19041 (make sure that it is checked while installing MSVC)
+* Windows SDK Debugging Tools
+    1. Navigate to `Control Panel` -> `Programs` -> `Programs and Features`
+    2. Right-click on `Windows Software Development Kit`, and choose `Change`
+    3. Select `Change` and click `Next`
+    4. Check the box for `Debugging Tools for Windows` and click `Change`
+Make sure to check `Add to PATH` for everything you install
+
+### Setup
+* Create a copy of your `<python_dir>/python.exe` executable as `<python_dir>/python3.exe`.
+* Make sure that `python`, `python3`, `cmake` and `git` are in your path.
+* Make sure the registry entry `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem::LongPathsEnabled` is set to `0x1`
+* Launch a `CMD` prompt as Administrator, and execute `git config --system core.longpaths true`
+
+### Building
+Using a CMD prompt (not tested with `powershell` or `git-bash` or any other shell)
+```powershell
+# Create build directory
+mkdir build
+# Go to build directory
+cd build
+# Run CMake with arguments
+cmake .. -G "Ninja" [-DCMAKE_BUILD_TYPE=Release|Debug]
+# Parallel build
+ninja
+# Copy to dist directory
+ninja install
+# Generate a zip archive in build/
+ninja package
+```
+### Important notes
+* You might have trouble building if your system is not in English
+* You might have trouble building if the full path to `python.exe` has at least one space in it
+
+### Consuming the library
+On Windows, you will have to link any target that consumes this library to these additional Windows libraries:
+* `secur32`
+* `winmm`
+* `dmoguids`
+* `wmcodecdspuuid`
+* `msdmo`
+* `strmiids`
+
+
+If you don't link against these libraries, your linker might see missing symbols like these ones:
+* `__imp_timeGetTime`
+* `__imp_timeKillEvent`
+* `__imp_timeSetEvent`
+* `__imp_timeBeginPeriod`
+* `__imp_timeEndPeriod`
+* `CLSID_CWMAudioAEC`
+* `IID_IMediaObject`
+* `IID_IMediaBuffer`
+* `MoInitMediaType`
+* `MoFreeMediaType`
+* `InitializeSecurityContextA`
+* `AcquireCredentialsHandleA`
+* `__imp_FreeCredentialsHandle`
+* `CompleteAuthToken`
+* `__imp_DeleteSecurityContext`
+
 ## Versioning Scheme
 `branch-head-number`.`commit-hash`.`patch-number`
 
@@ -42,6 +111,7 @@ make install
 
 * Marc-Antoine Maheux (@mamaheux)
 * Dominic Létourneau (@doumdi)
+* Philippe Warren (@philippewarren)
 
 ## License
 

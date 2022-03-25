@@ -165,35 +165,10 @@ install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/o
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/boringssl_asm DESTINATION lib)
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libyuv/libyuv_internal DESTINATION lib)
 
-install(DIRECTORY webrtc/src/api DESTINATION include
-    FILES_MATCHING PATTERN "*.h")
-
-install(DIRECTORY webrtc/src/rtc_base DESTINATION include
-    FILES_MATCHING PATTERN "*.h")
-
-install(DIRECTORY webrtc/src/media DESTINATION include
-    FILES_MATCHING PATTERN "*.h")
-
-install(DIRECTORY webrtc/src/modules DESTINATION include
-    FILES_MATCHING PATTERN "*.h")
-
-install(DIRECTORY webrtc/src/system_wrappers DESTINATION include
-    FILES_MATCHING PATTERN "*.h")
-
-install(DIRECTORY webrtc/src/common_video DESTINATION include
-    FILES_MATCHING PATTERN "*.h")
-
-install(DIRECTORY webrtc/src/common_audio DESTINATION include
-    FILES_MATCHING PATTERN "*.h")
-
-install(DIRECTORY webrtc/src/call DESTINATION include
-    FILES_MATCHING PATTERN "*.h")
-
-install(DIRECTORY webrtc/src/p2p DESTINATION include
-    FILES_MATCHING PATTERN "*.h")
-
-install(DIRECTORY webrtc/src/logging DESTINATION include
-    FILES_MATCHING PATTERN "*.h")
+# Install all includes except from third_party
+install(DIRECTORY webrtc/src/ DESTINATION include
+    FILES_MATCHING PATTERN "*.h"
+    PATTERN webrtc/src/third_party EXCLUDE)
 
 install(DIRECTORY webrtc/src/third_party/abseil-cpp/absl DESTINATION include
     FILES_MATCHING PATTERN "*.h")

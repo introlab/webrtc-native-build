@@ -62,6 +62,7 @@ jobs:
       working-directory: build
       run: |
         cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type}} -DCMAKE_BUILD_ARCHITECTURE=${{ matrix.architecture }}
+        echo '#include <linux/sockios.h>' | cat - ../3rdParty/webrtc_native/webrtc/src/rtc_base/physical_socket_server.cc > temp && mv temp ../3rdParty/webrtc_native/webrtc/src/rtc_base/physical_socket_server.cc
         make -j2
         make install
 

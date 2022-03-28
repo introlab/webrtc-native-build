@@ -52,7 +52,7 @@ jobs:
       matrix:
         os: [ubuntu-18.04, ubuntu-20.04]
         architecture: [arm32, arm64, amd64]
-        build-type: [Release, Debug]
+        build-type: [Release]
 
     runs-on: ${{ matrix.os }}
     steps:

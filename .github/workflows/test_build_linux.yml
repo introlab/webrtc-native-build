@@ -4,7 +4,7 @@ name: test_build_linux
 on:
   workflow_dispatch:
     branches: [ main ]
-    
+
 jobs:
   build-linux:
     strategy:
@@ -18,16 +18,16 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
-           
+
     - name: Generate Version Output
       id: generate_version_output
       run: echo "::set-output name=version::$(cat VERSION)"
       shell: bash
-        
+
     - name: Print Version Information
       run: echo "Version ${{ steps.generate_version_output.outputs.version }}"
       shell: bash
-   
+
     - name: Generate Release File Name
       id: generate_release_file_name
       run: |
@@ -35,23 +35,29 @@ jobs:
         ${{ matrix.architecture }}-\
         ${{ matrix.build-type }}-\
         ${{ steps.generate_version_output.outputs.version }}"
-          
+
     - name: Print Release File Name
       run: echo "Release File Name ${{ steps.generate_release_file_name.outputs.release_file_name }}"
       shell: bash
-       
+
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install ninja-build cmake build-essential libssl-dev libboost-all-dev 
-        sudo apt-get install libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev 
+        sudo apt-get install ninja-build cmake build-essential libssl-dev libboost-all-dev
+        sudo apt-get install libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev
         sudo apt-get install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
         sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+
+    - name: Install extra system dependencies
+      if: ${{ matrix.os == ubuntu-20.04 }}
+      run: |
+        sudo apt-get install python-is-python2
+
     - name: Create build directory
       working-directory: .
       run: |
         mkdir build
-        
+
     - name: Run CMake and build webrtc-native-build
       working-directory: build
       run: |

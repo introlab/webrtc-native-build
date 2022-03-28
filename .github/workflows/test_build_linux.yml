@@ -49,7 +49,7 @@ jobs:
         sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
 
     - name: Install extra system dependencies
-      if: ${{ matrix.os == ubuntu-20.04 }}
+      if: ${{ matrix.os == "ubuntu-20.04" }}
       run: |
         sudo apt-get install python-is-python2
 

@@ -9,8 +9,8 @@ jobs:
   build-linux:
     strategy:
       matrix:
-        os: [ubuntu-18.04, ubuntu-20.04]
-        architecture: [arm32, arm64, amd64]
+        os: [ubuntu-20.04]
+        architecture: [amd64]
         build-type: [Release, Debug]
 
     runs-on: ${{ matrix.os }}

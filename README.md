@@ -6,6 +6,15 @@ Native build of Google's webrtc library. The library is also packaged with Borin
 * [BoringSSL](https://github.com/google/boringssl) is a fork of OpenSSL that is designed to meet Google's needs.
 * [libyuv](https://chromium.googlesource.com/libyuv/libyuv/) is an open source project that includes YUV scaling and conversion functionalities.
 
+## License
+By default, libwebrtc is built with non-free codecs. To build without them, change the following flags in [generate_ninja_files.bash](3rdParty/webrtc_native/generate_ninja_files.bash) and [generate_ninja_files.bat](3rdParty/webrtc_native/generate_ninja_files.bat).
+
+```bash
+rtc_use_h264=false
+proprietary_codecs=false
+ffmpeg_branding="Chromium"
+```
+
 ## Dependencies (Linux)
 ```bash
 sudo apt-get install ninja-build cmake build-essential libssl-dev libboost-all-dev

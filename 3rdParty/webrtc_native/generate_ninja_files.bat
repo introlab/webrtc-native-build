@@ -11,6 +11,7 @@ set args=is_component_build=false^
          rtc_include_tests=false^
          rtc_use_h264=true^
          proprietary_codecs=true^
+         ffmpeg_branding=\"Chrome\"^
          target_cpu=\"x64\"^
          enable_iterator_debugging=false^
          rtc_build_examples=false^

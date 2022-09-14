@@ -105,7 +105,11 @@ If you don't link against these libraries, your linker might see missing symbols
 * `__imp_DeleteSecurityContext`
 
 ## Versioning Scheme
-`branch-head-number`.`commit-hash`.`patch-number`
+
+`branch-head-number`.`first-6-digits-of-webrtc-commit-hash`.`patch-number`
+
+To find the `patch-number` for a given `branch-head-number`, use the following web page:
+`https://chromium.googlesource.com/chromium/src/+/branch-heads/<branch-head-number>/chrome/VERSION`
 
 ## Authors
 

@@ -45,6 +45,11 @@ make install
 ```
 
 ## Building on Windows
+Building on Windows is not supported yet for recent versions of WebRTC.
+You can submit a PR to help with this if you wish.
+If you want to build on Windows, you can use the tag `4389.e7d9f7.130`.
+There is also a prebuilt version of the library available in the releases section on GitHub.
+
 ### Dependencies
 * [Ninja](https://github.com/ninja-build/ninja/releases)
     * Copy `ninja.exe` in `3rdParty/webrtc_native/`
@@ -114,7 +119,22 @@ If you don't link against these libraries, your linker might see missing symbols
 * `__imp_DeleteSecurityContext`
 
 ## Versioning Scheme
-`branch-head-number`.`commit-hash`.`patch-number`
+
+`branch-head-number`.`first-6-digits-of-webrtc-commit-hash`.`patch-number`
+
+To find the `patch-number` for a given `branch-head-number`, use the following web page:
+`https://chromium.googlesource.com/chromium/src/+/branch-heads/<branch-head-number>/chrome/VERSION`
+
+## Dropped support
+
+### Ubuntu 18.04
+Use the tag `4389.e7d9f7.130` or earlier if you need to build on Ubuntu 18.04.
+There are also prebuilt versions of the library available in the releases section on GitHub.
+
+### MacOS 10.15 Catalina
+GitHub Actions dropped support for MacOS 10.15 Catalina.
+However, the latest tag might still work to build under MacOS 10.15.
+There are also prebuilt versions of the library available in the releases section on GitHub, for tag version `5039.5df5b1.1` and earlier.
 
 ## Authors
 

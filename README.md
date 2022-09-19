@@ -36,6 +36,11 @@ make install
 ```
 
 ## Building on Windows
+Building on Windows is not supported yet for recent versions of WebRTC.
+You can submit a PR to help with this if you wish.
+If you want to build on Windows, you can use the tag `4896.ffd918.154`.
+There is also a prebuilt version of the library available in the releases section on GitHub.
+
 ### Dependencies
 * [Ninja](https://github.com/ninja-build/ninja/releases)
     * Copy `ninja.exe` in `3rdParty/webrtc_native/`
@@ -110,6 +115,12 @@ If you don't link against these libraries, your linker might see missing symbols
 
 To find the `patch-number` for a given `branch-head-number`, use the following web page:
 `https://chromium.googlesource.com/chromium/src/+/branch-heads/<branch-head-number>/chrome/VERSION`
+
+## Dropped support
+
+Ubuntu 18.04 support was dropped.
+Use the tag `4896.ffd918.154` if you need to build on Ubuntu 18.04.
+There is also a prebuilt version of the library available in the releases section on GitHub.
 
 ## Authors
 

@@ -119,13 +119,13 @@ To find the `patch-number` for a given `branch-head-number`, use the following w
 ## Dropped support
 
 ### Ubuntu 18.04
-Use the tag `4005.8f22a2.1` or earlier if you need to build on Ubuntu 18.04.
+Use the tag `4389.e7d9f7.130` or earlier if you need to build on Ubuntu 18.04.
 There are also prebuilt versions of the library available in the releases section on GitHub.
 
 ### MacOS 10.15 Catalina
 GitHub Actions dropped support for MacOS 10.15 Catalina.
 However, the latest tag might still work to build under MacOS 10.15.
-There are also prebuilt versions of the library available in the releases section on GitHub, for tag version `4896.ffd918.154` and earlier.
+There are also prebuilt versions of the library available in the releases section on GitHub, for tag version `5039.5df5b1.1` and earlier.
 
 ## Authors
 

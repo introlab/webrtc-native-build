@@ -38,7 +38,7 @@ make install
 ## Building on Windows
 Building on Windows is not supported yet for recent versions of WebRTC.
 You can submit a PR to help with this if you wish.
-If you want to build on Windows, you can use the tag `4896.ffd918.154`.
+If you want to build on Windows, you can use the tag `4389.e7d9f7.130`.
 There is also a prebuilt version of the library available in the releases section on GitHub.
 
 ### Dependencies
@@ -118,9 +118,14 @@ To find the `patch-number` for a given `branch-head-number`, use the following w
 
 ## Dropped support
 
-Ubuntu 18.04 support was dropped.
-Use the tag `4896.ffd918.154` if you need to build on Ubuntu 18.04.
-There is also a prebuilt version of the library available in the releases section on GitHub.
+### Ubuntu 18.04
+Use the tag `4005.8f22a2.1` or earlier if you need to build on Ubuntu 18.04.
+There are also prebuilt versions of the library available in the releases section on GitHub.
+
+### MacOS 10.15 Catalina
+GitHub Actions dropped support for MacOS 10.15 Catalina.
+However, the latest tag might still work to build under MacOS 10.15.
+There are also prebuilt versions of the library available in the releases section on GitHub, for tag version `4896.ffd918.154` and earlier.
 
 ## Authors
 

@@ -63,13 +63,21 @@ jobs:
           sudo apt-get install gcc-8 g++-8
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 100
           sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 100
-          sudo update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 100
-          sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 100
           sudo update-alternatives --set gcc /usr/bin/gcc-8
           sudo update-alternatives --set g++ /usr/bin/g++-8
-          sudo update-alternatives --set cc /usr/bin/gcc
-          sudo update-alternatives --set c++ /usr/bin/g++
-        if: matrix.os == 'ubuntu-18.04'
+        if: matrix.os == 'ubuntu-18.04' && matrix.architecture != 'arm64'
+
+      - name: Use gcc-8 and g++-8 cross-compilers on ubuntu-18.04
+        run: |
+          sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-8 100
+          sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-g++ aarch64-linux-gnu-g++ /usr/bin/aarch64-linux-gnu-g++-8 100
+          sudo update-alternatives --set aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-8
+          sudo update-alternatives --set aarch64-linux-gnu-g++ /usr/bin/aarch64-linux-gnu-g++-8
+          sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcc arm-linux-gnueabihf-gcc /usr/bin/arm-linux-gnueabihf-gcc-8 100
+          sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-g++ arm-linux-gnueabihf-g++ /usr/bin/arm-linux-gnueabihf-g++-8 100
+          sudo update-alternatives --set arm-linux-gnueabihf-gcc /usr/bin/arm-linux-gnueabihf-gcc-8
+          sudo update-alternatives --set arm-linux-gnueabihf-g++ /usr/bin/arm-linux-gnueabihf-g++-8
+        if: matrix.os == 'ubuntu-18.04' && matrix.architecture == 'arm64'
 
       - name: Create build directory
         working-directory: .

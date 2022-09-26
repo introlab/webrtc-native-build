@@ -18,7 +18,7 @@ ffmpeg_branding="Chromium"
 ## Dependencies (Linux)
 ```bash
 sudo apt-get install ninja-build cmake build-essential libssl-dev libboost-all-dev
-sudo apt-get install libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev tree
+sudo apt-get install libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev
 
 # For cross compiling
 sudo apt-get install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
@@ -50,7 +50,7 @@ sudo update-alternatives --set arm-linux-gnueabihf-g++ /usr/bin/arm-linux-gnueab
 ## Dependencies (Mac)
 ```bash
 # XCode and homebrew must be installed first.
-brew install ninja tree
+brew install ninja
 ```
 
 ## Building

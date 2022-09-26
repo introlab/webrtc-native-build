@@ -18,15 +18,39 @@ ffmpeg_branding="Chromium"
 ## Dependencies (Linux)
 ```bash
 sudo apt-get install ninja-build cmake build-essential libssl-dev libboost-all-dev
-sudo apt-get install libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev
+sudo apt-get install libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev tree
+
+# For cross compiling
 sudo apt-get install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
 sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+```
+
+## Building on Ubuntu 18.04: using gcc/g++ 8
+```bash
+sudo apt-get install gcc-8 g++-8
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 100
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 100
+sudo update-alternatives --set gcc /usr/bin/gcc-8
+sudo update-alternatives --set g++ /usr/bin/g++-8
+
+# For cross compiling
+sudo apt-get install g++-8-aarch64-linux-gnu gcc-8-aarch64-linux-gnu
+sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-8 100
+sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-g++ aarch64-linux-gnu-g++ /usr/bin/aarch64-linux-gnu-g++-8 100
+sudo update-alternatives --set aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-8
+sudo update-alternatives --set aarch64-linux-gnu-g++ /usr/bin/aarch64-linux-gnu-g++-8
+
+sudo apt-get install gcc-8-arm-linux-gnueabihf g++-8-arm-linux-gnueabihf
+sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcc arm-linux-gnueabihf-gcc /usr/bin/arm-linux-gnueabihf-gcc-8 100
+sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-g++ arm-linux-gnueabihf-g++ /usr/bin/arm-linux-gnueabihf-g++-8 100
+sudo update-alternatives --set arm-linux-gnueabihf-gcc /usr/bin/arm-linux-gnueabihf-gcc-8
+sudo update-alternatives --set arm-linux-gnueabihf-g++ /usr/bin/arm-linux-gnueabihf-g++-8
 ```
 
 ## Dependencies (Mac)
 ```bash
 # XCode and homebrew must be installed first.
-brew install ninja
+brew install ninja tree
 ```
 
 ## Building
@@ -126,10 +150,6 @@ To find the `patch-number` for a given `branch-head-number`, use the following w
 `https://chromium.googlesource.com/chromium/src/+/branch-heads/<branch-head-number>/chrome/VERSION`
 
 ## Dropped support
-
-### Ubuntu 18.04
-Use the tag `4389.e7d9f7.130` or earlier if you need to build on Ubuntu 18.04.
-There are also prebuilt versions of the library available in the releases section on GitHub.
 
 ### MacOS 10.15 Catalina
 GitHub Actions dropped support for MacOS 10.15 Catalina.

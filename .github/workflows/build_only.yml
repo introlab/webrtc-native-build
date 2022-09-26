@@ -61,8 +61,6 @@ jobs:
       - name: Use gcc-8 and g++-8 on ubuntu-18.04
         run: |
           sudo apt-get install gcc-8 g++-8
-          sudo update-alternatives --remove-all gcc
-          sudo update-alternatives --remove-all g++
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 100
           sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 100
           sudo update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 100

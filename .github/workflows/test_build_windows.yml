@@ -4,10 +4,17 @@ name: test_build_windows
 on:
   workflow_dispatch:
     branches: [main]
+    inputs:
+      fail_fast:
+        description: "Should stop the workflow as soon as one configuration fails"
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   build-windows:
     strategy:
+      fail-fast: ${{ github.event.inputs.fail_fast != 'false'}}
       matrix:
         os: [windows-2019]
         architecture: [win64]

@@ -58,8 +58,8 @@ There is also a prebuilt version of the library available in the releases sectio
 * [CMake](https://cmake.org/download)
 * [Git](https://git-scm.com/download/win)
 * [Python](https://www.python.org/downloads)
-* [MSVC 2019 Build Tools](https://visualstudio.microsoft.com/vs/older-downloads/#visual-studio-2019-and-other-products)
-* Windows SDK 10.1.19041 (make sure that it is checked while installing MSVC)
+* [MSVC 2022 Build Tools](https://visualstudio.microsoft.com/fr/downloads/)
+* Windows SDK 10.0.20348.0 (make sure that it is checked while installing MSVC)
 * Windows SDK Debugging Tools
     1. Navigate to `Control Panel` -> `Programs` -> `Programs and Features`
     2. Right-click on `Windows Software Development Kit`, and choose `Change`
@@ -101,6 +101,7 @@ On Windows, you will have to link any target that consumes this library to these
 * `wmcodecdspuuid`
 * `msdmo`
 * `strmiids`
+* `iphlpapi`
 
 
 If you don't link against these libraries, your linker might see missing symbols like these ones:

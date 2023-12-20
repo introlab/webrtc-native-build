@@ -63,11 +63,11 @@ jobs:
           swap-size-mb: 1024
           remove-dotnet: 'true'
     
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         with:
           name: release_url
 
@@ -148,20 +148,12 @@ jobs:
         build-type: [Release, Debug]
 
     runs-on: ${{ matrix.os }}
-    steps:
-
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@master
-        with:
-          root-reserve-mb: 1024
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
-    
-      - uses: actions/checkout@v2
+    steps:    
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         with:
           name: release_url
 

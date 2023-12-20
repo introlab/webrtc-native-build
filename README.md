@@ -121,6 +121,26 @@ If you don't link against these libraries, your linker might see missing symbols
 * `CompleteAuthToken`
 * `__imp_DeleteSecurityContext`
 
+## How to use a new version?
+1. Fetch WebRTC Code
+```bash
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+```
+2. Find the new `branch-head-number`
+    1. Open Chrome
+    2. Open the following URL [chrome://settings/help](chrome://settings/help)
+    3. The new `branch-head-number` is the third number of the version (Version 120.0.6099.109 --> `branch-head-number` = 6099)
+3. Find the commit hash
+```bash
+git checkout branch-heads/<branch-head-number>
+git rev-parse HEAD
+```
+4. Update the version (see the next section)
+    1. Update the hash and version in the [CMakeList.txt file](3rdParty/webrtc_native/CMakeLists.txt#L1-L2)
+    2. Update the [VERSION file](VERSION)
+
 ## Versioning Scheme
 
 `branch-head-number`.`first-6-digits-of-webrtc-commit-hash`.`patch-number`

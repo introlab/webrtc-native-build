@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
-
+          
       - name: Generate Version Output
         id: generate_version_output
         run: echo "::set-output name=version::$(cat VERSION)"
@@ -55,6 +55,14 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
+
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
+    
       - uses: actions/checkout@v2
         with:
           submodules: recursive
@@ -141,6 +149,14 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
+
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
+    
       - uses: actions/checkout@v2
         with:
           submodules: recursive

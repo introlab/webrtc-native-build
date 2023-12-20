@@ -143,7 +143,7 @@ jobs:
     needs: create-release
     strategy:
       matrix:
-        os: [macos-11, macos-12]
+        os: [macos-11, macos-12, macos-13]
         architecture: [osx64]
         build-type: [Release, Debug]
 

@@ -1,0 +1,53 @@
+# This workflow will create a release and build multiple versions of the webrtc library.
+name: build_docker_linux
+
+on:
+  workflow_dispatch:
+    inputs:
+      fail_fast:
+        description: "Should stop the workflow as soon as one configuration fails"
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  build-linux:
+    strategy:
+      fail-fast: ${{ github.event.inputs.fail_fast != 'false'}}
+      matrix:
+        os: [ubuntu-20.04]
+        architecture: [amd64]
+        build-type: [Release]
+
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Generate Version Output
+        id: generate_version_output
+        run: echo "::set-output name=version::$(cat VERSION)"
+        shell: bash
+
+      - name: Print Version Information
+        run: echo "Version ${{ steps.generate_version_output.outputs.version }}"
+        shell: bash
+
+      - name: Generate Release File Name
+        id: generate_release_file_name
+        run: |
+          echo "::set-output name=release_file_name::webrtc-native-build-${{ matrix.os }}-\
+          ${{ matrix.architecture }}-\
+          ${{ matrix.build-type }}-\
+          ${{ steps.generate_version_output.outputs.version }}"
+
+      - name: Print Release File Name
+        run: echo "Release File Name ${{ steps.generate_release_file_name.outputs.release_file_name }}"
+        shell: bash
+
+      - name: Create and run Docker Image
+        working-directory: ./docker/${{ matrix.os }}
+        run: ./run.sh
+        shell: bash
+

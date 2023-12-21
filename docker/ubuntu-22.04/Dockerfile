@@ -33,5 +33,5 @@ RUN make install
 
 RUN mkdir /data
 
-WORKDIR /root/webrtc-native-build/dist
+WORKDIR /root/webrtc-native-build/dist/${BUILD_TYPE}
 CMD ["/bin/bash", "-c", "tar cvzf /data/release.tar.gz ."]

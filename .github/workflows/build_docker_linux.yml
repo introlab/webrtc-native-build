@@ -44,6 +44,11 @@ jobs:
           ${{ matrix.build-type }}-\
           ${{ steps.generate_version_output.outputs.version }}"
 
+      - name: Generate Branch Name
+        id: generate_branch_name
+        run: |
+            echo "::set-output name=branch_name::${GITHUB_REF#refs/heads/}"
+
       - name: Print Release File Name
         run: echo "Release File Name ${{ steps.generate_release_file_name.outputs.release_file_name }}"
         shell: bash
@@ -51,7 +56,7 @@ jobs:
       - name: Create and run Docker Image
         working-directory: ./docker/${{ matrix.os }}
         run: |
-          docker buildx build -t webrtc --build-arg BUILD_TYPE=${{ matrix.build-type }} --build-arg BUILD_ARCHITECTURE=${{ matrix.architecture }} --build-arg BUILD_BRANCH=${{ github.ref }} .
+          docker buildx build -t webrtc --build-arg BUILD_TYPE=${{ matrix.build-type }} --build-arg BUILD_ARCHITECTURE=${{ matrix.architecture }} --build-arg BUILD_BRANCH=${{ steps.generate_branch_name.outputs.branch_name }} .
           docker run --rm --volume $PWD:/data webrtc tar cvzf /data/${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz ./${{ matrix.build-type }}/webrtc-native-build-${{ steps.generate_version_output.outputs.version }}
           ls -l
 

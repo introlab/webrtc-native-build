@@ -29,7 +29,7 @@ jobs:
 
       - name: Generate Version Output
         id: generate_version_output
-        run: echo "::set-output name=version::$(cat VERSION)"
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Print Version Information
@@ -39,10 +39,10 @@ jobs:
       - name: Generate Release File Name
         id: generate_release_file_name
         run: |
-          echo "::set-output name=release_file_name::webrtc-native-build-${{ matrix.os }}-\
+          echo "release_file_name=webrtc-native-build-${{ matrix.os }}-\
           ${{ matrix.architecture }}-\
           ${{ matrix.build-type }}-\
-          ${{ steps.generate_version_output.outputs.version }}"
+          ${{ steps.generate_version_output.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Generate Branch Name
         id: generate_branch_name

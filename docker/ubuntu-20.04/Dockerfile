@@ -28,7 +28,7 @@ RUN mkdir build
 WORKDIR /root/webrtc-native-build/build
 
 RUN cmake ../ -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_BUILD_ARCHITECTURE=${BUILD_ARCHITECTURE}
-RUN make -j4
+RUN make -j2
 RUN make install
 
 VOLUME [ "/data" ]

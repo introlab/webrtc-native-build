@@ -31,7 +31,7 @@ RUN cmake ../ -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_BUILD_ARCHITECTURE=${BUIL
 RUN make -j4
 RUN make install
 
-RUN mkdir /data
+VOLUME [ "/data" ]
 
 WORKDIR /root/webrtc-native-build/dist/${BUILD_TYPE}
 CMD ["/bin/bash", "-c", "tar cvzf /data/release.tar.gz ."]

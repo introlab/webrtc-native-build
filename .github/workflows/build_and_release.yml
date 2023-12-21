@@ -48,6 +48,7 @@ jobs:
   build-linux:
     needs: create-release
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-20.04, ubuntu-22.04]
         architecture: [amd64, arm64]
@@ -142,6 +143,7 @@ jobs:
   build-mac:
     needs: create-release
     strategy:
+      fail-fast: false
       matrix:
         os: [macos-11, macos-12, macos-13]
         architecture: [osx64]

@@ -116,26 +116,26 @@ else(WIN32)
 
     if (CMAKE_BUILD_ARCHITECTURE MATCHES arm64)
         execute_process(
-            COMMAND python install-sysroot.py --arch=${CMAKE_BUILD_ARCHITECTURE}
+            COMMAND python3 install-sysroot.py --arch=${CMAKE_BUILD_ARCHITECTURE}
             WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src/build/linux/sysroot_scripts"
             RESULT_VARIABLE build_sysroot_architecture
         )
 
         if(NOT ${build_sysroot_architecture} EQUAL 0)
-            message(FATAL_ERROR "\"python install-sysroot.py --arch=arm64\" failed (${build_sysroot_architecture})")
+            message(FATAL_ERROR "\"python3 install-sysroot.py --arch=arm64\" failed (${build_sysroot_architecture})")
         endif()
     endif()
 
 
     if (CMAKE_BUILD_ARCHITECTURE MATCHES arm32)
         execute_process(
-                COMMAND python install-sysroot.py --arch=arm
+                COMMAND python3 install-sysroot.py --arch=arm
                 WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src/build/linux/sysroot_scripts"
                 RESULT_VARIABLE build_sysroot_architecture
         )
 
         if(NOT ${build_sysroot_architecture} EQUAL 0)
-            message(FATAL_ERROR "\"python install-sysroot.py --arch=arm\" failed (${build_sysroot_architecture})")
+            message(FATAL_ERROR "\"python3 install-sysroot.py --arch=arm\" failed (${build_sysroot_architecture})")
         endif()
     endif()
 

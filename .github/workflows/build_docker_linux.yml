@@ -51,6 +51,9 @@ jobs:
       - name: Create and run Docker Image
         working-directory: ./docker/${{ matrix.os }}
         run: |
-          docker buildx build -t webrtc --build-arg BUILD_TYPE=${{ matrix.build-type }} --build-arg BUILD_ARCHITECTURE=${{ matrix.architecture }} --build-arg BUILD_BRANCH=update-webrtc .
+          docker buildx build -t webrtc --build-arg BUILD_TYPE=${{ matrix.build-type }} --build-arg BUILD_ARCHITECTURE=${{ matrix.architecture }} --build-arg BUILD_BRANCH=${{ github.ref }} .
+          docker run --rm --volume $PWD:/data webrtc tar cvzf /data/${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz ./${{ matrix.build-type }}/webrtc-native-build-${{ steps.generate_version_output.outputs.version }}
+          ls -l
+
         shell: bash
 

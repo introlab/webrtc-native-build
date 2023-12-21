@@ -47,10 +47,10 @@ jobs:
       - name: Generate Branch Name
         id: generate_branch_name
         run: |
-            echo "::set-output name=branch_name::${GITHUB_REF#refs/heads/}"
+            echo "{branch_name}={GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
 
       - name: Print Release File Name
-        run: echo "Release File Name ${{ steps.generate_release_file_name.outputs.release_file_name }}"
+        run: echo "Release File Name ${{ steps.generate_release_file_name.outputs.release_file_name }} on branch ${{ steps.generate_branch_name.outputs.branch_name }}"
         shell: bash
 
       - name: Create and run Docker Image

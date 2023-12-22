@@ -33,7 +33,7 @@ case "$architecture" in
 	arm64|aarch64)
 		a=arm64
 		extras=""
-		extra_flags="is_clang=true use_sysroot=true sysroot=\"$sysroot\" target_os=\"linux\" arm_control_flow_integrity=\"none\""
+		extra_flags="rtc_build_tools=true is_clang=true use_sysroot=true sysroot=\"$sysroot\" target_os=\"linux\" arm_control_flow_integrity=\"none\""
 	;;
 	osx64)
 		a=x64

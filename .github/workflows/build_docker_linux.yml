@@ -10,7 +10,7 @@ on:
         description: "Should stop the workflow as soon as one configuration fails"
         required: false
         type: boolean
-        default: true
+        default: false
 
 jobs:
   build-linux:

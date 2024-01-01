@@ -1,5 +1,5 @@
-# VERSION MAJOR = 116, MINOR=6, BUILD=5845, PATCH=0
-set(WEBRTC_CHECKOUT 44bc8e96ed88005fec89a1cc479e291fea30d1b3)
+# WEBRTC_SEMANTIC_VERSION=120.6099.1.1
+set(WEBRTC_CHECKOUT b0cc68e61205fd11a7256a6e85307ec17ad95790)
 
 if(WIN32)
 
@@ -77,25 +77,25 @@ else(WIN32)
 
     if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/webrtc/src")
         execute_process(
-            COMMAND fetch webrtc
+            COMMAND fetch --nohooks webrtc
             WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
             RESULT_VARIABLE fetch_webrtc_result
         )
         if(NOT ${fetch_webrtc_result} EQUAL 0)
-            message(FATAL_ERROR "\"fetch webrtc\" failed (${fetch_webrtc_result})")
+            message(FATAL_ERROR "\"fetch --nohooks webrtc\" failed (${fetch_webrtc_result})")
         endif()
 
         execute_process(
-            COMMAND gclient sync --with_branch_heads --with_tags
+            COMMAND git fetch
             WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
-            RESULT_VARIABLE gclient_sync_webrtc_result
+            RESULT_VARIABLE git_fetch_webrtc_result
         )
-        if(NOT ${gclient_sync_webrtc_result} EQUAL 0)
-            message(FATAL_ERROR "\"gclient sync --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
+        if(NOT ${git_fetch_webrtc_result} EQUAL 0)
+            message(FATAL_ERROR "\"git fetch\" failed (${git_fetch_webrtc_result})")
         endif()
 
         execute_process(
-            COMMAND git checkout ${WEBRTC_CHECKOUT}
+            COMMAND git checkout -f ${WEBRTC_CHECKOUT}
             WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src"
             RESULT_VARIABLE git_checkout_webrtc_result
         )
@@ -104,12 +104,13 @@ else(WIN32)
         endif()
 
         execute_process(
-            COMMAND gclient sync --with_branch_heads --with_tags
+            # Removing unused files and directory
+            COMMAND gclient sync -D
             WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
             RESULT_VARIABLE gclient_sync_webrtc_result
         )
         if(NOT ${gclient_sync_webrtc_result} EQUAL 0)
-            message(FATAL_ERROR "\"gclient sync --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
+            message(FATAL_ERROR "\"gclient sync -D\" failed (${gclient_sync_webrtc_result})")
         endif()
     endif()
 

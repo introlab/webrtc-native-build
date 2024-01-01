@@ -1,0 +1,19 @@
+# Copyright 2018-2019, Shiguredo Inc, tnoho and melpon and kdxu
+# from https://github.com/shiguredo/momo/blob/develop/patch/4k.patch
+
+diff --git a/src/video/config/encoder_stream_factory.cc b/src/video/config/encoder_stream_factory.cc
+index fceadf09b4..a73b7e9f6f 100644
+--- a/src/video/config/encoder_stream_factory.cc
++++ b/src/video/config/encoder_stream_factory.cc
+@@ -86,8 +86,10 @@ static int GetMaxDefaultVideoBitrateKbps(int width,
+     max_bitrate = 1700;
+   } else if (width * height <= 960 * 540) {
+     max_bitrate = 2000;
+-  } else {
++  } else if (width * height <= 1920 * 1080) {
+     max_bitrate = 2500;
++  } else {
++    max_bitrate = 15000;
+   }
+   if (is_screenshare)
+     max_bitrate = std::max(max_bitrate, 1200);

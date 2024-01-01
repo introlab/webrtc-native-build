@@ -4,11 +4,11 @@ SHELL ["/bin/bash", "--login", "-c"]
 
 # Install build dependencies
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y \
-	build-essential git sudo vim libprotobuf-dev protobuf-compiler locales wget curl cmake \
+	build-essential git sudo vim libprotobuf-dev protobuf-compiler locales wget curl cmake pkg-config ca-certificates \
     ninja-build  libssl-dev libboost-all-dev libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev patch
 
 # Install cross-compiler
-RUN apt install -y g++-aarch64-linux-gnu gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+RUN apt install -y g++-aarch64-linux-gnu gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf clang
 
 # Define a build-time argument
 ARG BUILD_TYPE=Release

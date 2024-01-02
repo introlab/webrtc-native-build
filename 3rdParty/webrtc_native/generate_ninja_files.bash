@@ -46,7 +46,7 @@ case "$architecture" in
 esac
 
 
-common_flags="is_component_build=false treat_warnings_as_errors=false fatal_linker_warnings=false use_gio=false use_rtti=true use_custom_libcxx=false use_custom_libcxx_for_host=false rtc_enable_protobuf=false rtc_include_tests=false rtc_use_h264=true rtc_use_av1=false rtc_use_libaom=false proprietary_codecs=true ffmpeg_branding=\"Chrome\" target_cpu=\"$a\" $extras enable_iterator_debugging=false rtc_build_examples=false rtc_use_pipewire=false"
+common_flags="is_component_build=false treat_warnings_as_errors=false fatal_linker_warnings=false use_gio=false use_rtti=true use_custom_libcxx=false use_custom_libcxx_for_host=false rtc_enable_protobuf=false rtc_include_tests=false rtc_use_h264=true proprietary_codecs=true ffmpeg_branding=\"Chrome\" target_cpu=\"$a\" $extras enable_iterator_debugging=false rtc_build_examples=false rtc_use_pipewire=false"
 
 
 gn gen out/Debug --args="is_debug=true $common_flags $extra_flags"

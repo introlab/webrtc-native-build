@@ -15,7 +15,7 @@ on:
 jobs:
   build-linux:
     strategy:
-      fail-fast: ${{ github.event.inputs.fail_fast != 'false'}}
+      fail-fast: false
       matrix:
         os: [ubuntu-20.04, ubuntu-22.04]
         architecture: [arm64, amd64]

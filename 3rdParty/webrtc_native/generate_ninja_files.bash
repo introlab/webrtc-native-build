@@ -28,12 +28,12 @@ case "$architecture" in
 	arm32|armhf|armv*)
 		a=arm
 		extras=" arm_float_abi=\"hard\""
-		extra_flags="use_sysroot=true sysroot=\"$sysroot\" target_os=\"linux\" arm_control_flow_integrity=\"none\""
+		extra_flags="is_clang=false use_sysroot=true sysroot=\"$sysroot\" target_os=\"linux\" arm_control_flow_integrity=\"none\""
 	;;
 	arm64|aarch64)
 		a=arm64
 		extras=""
-		extra_flags="use_sysroot=true sysroot=\"$sysroot\" target_os=\"linux\" arm_control_flow_integrity=\"none\""
+		extra_flags="is_clang=false use_sysroot=true sysroot=\"$sysroot\" target_os=\"linux\" arm_control_flow_integrity=\"none\""
 	;;
 	osx64)
 		a=x64

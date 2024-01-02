@@ -8,7 +8,7 @@ RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y \
     ninja-build  libssl-dev libboost-all-dev libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev patch
 
 # Install cross-compiler
-RUN apt install -y g++-aarch64-linux-gnu gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf clang
+RUN apt install -y gcc-10-aarch64-linux-gnu libc6-dev-arm64-cross g++-10-aarch64-linux-gnu gcc-10-arm-linux-gnueabihf g++-10-arm-linux-gnueabihf clang
 
 # Define a build-time argument
 ARG BUILD_TYPE=Release

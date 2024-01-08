@@ -118,7 +118,7 @@ jobs:
         working-directory: ./docker/${{ matrix.os }}
         run: |
           docker buildx build -t webrtc --build-arg BUILD_TYPE=${{ matrix.build-type }} --build-arg BUILD_ARCHITECTURE=${{ matrix.architecture }} --build-arg BUILD_BRANCH=${{ steps.generate_branch_name.outputs.branch_name }} .
-          docker run --rm --volume $PWD:/data webrtc tar cvzf /data/${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz ./webrtc-native-build-${{ steps.generate_version_output.outputs.version }}
+          docker run --rm --volume $PWD:/data webrtc tar cvzf /data/${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz ./
           ls -l
         shell: bash
 
@@ -129,7 +129,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_release_info.outputs.upload_url }}
-          asset_path: /data/${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz
+          asset_path: ./docker/${{ matrix.os }}/${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz
           asset_name: ${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz
           asset_content_type: application/x-gzip
 

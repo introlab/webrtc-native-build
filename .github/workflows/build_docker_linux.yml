@@ -2,8 +2,6 @@
 name: build_docker_linux
 
 on:
-  push:
-    branches: [update-webrtc]
   workflow_dispatch:
     inputs:
       fail_fast:

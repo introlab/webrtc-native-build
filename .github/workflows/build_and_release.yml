@@ -3,20 +3,25 @@ name: build_and_release
 
 on:
   workflow_dispatch:
-    branches: [main]
+    inputs:
+      fail_fast:
+        description: "Should stop the workflow as soon as one configuration fails"
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   create-release:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - name: Generate Version Output
         id: generate_version_output
-        run: echo "::set-output name=version::$(cat VERSION)"
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Print Version Information
@@ -40,7 +45,7 @@ jobs:
       - name: Output Release URL File
         run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
       - name: Save Release URL File for publish
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: release_url
           path: release_url.txt
@@ -48,31 +53,44 @@ jobs:
   build-linux:
     needs: create-release
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-20.04, ubuntu-22.04]
-        architecture: [amd64, arm64]
+        architecture: [arm64, amd64]
         build-type: [Release, Debug]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+            root-reserve-mb: 40000
+            swap-size-mb: 1024
+            remove-dotnet: 'true'
+            remove-android: 'true'
+            remove-haskell: 'true'
+            remove-codeql: 'true'
+            remove-docker-images: 'true'
+
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         with:
           name: release_url
 
       - name: Get Upload URL
         id: get_release_info
         run: |
-          echo "::set-output name=upload_url::$(cat release_url.txt)"
+          echo "upload_url=$(cat release_url.txt)"  >> $GITHUB_OUTPUT
           ls -l
           cat release_url.txt
 
       - name: Generate Version Output
         id: generate_version_output
-        run: echo "::set-output name=version::$(cat VERSION)"
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Print Version Information
@@ -82,43 +100,27 @@ jobs:
       - name: Generate Release File Name
         id: generate_release_file_name
         run: |
-          echo "::set-output name=release_file_name::webrtc-native-build-${{ matrix.os }}-\
+          echo "release_file_name=webrtc-native-build-${{ matrix.os }}-\
           ${{ matrix.architecture }}-\
           ${{ matrix.build-type }}-\
-          ${{ steps.generate_version_output.outputs.version }}"
+          ${{ steps.generate_version_output.outputs.version }}" >> $GITHUB_OUTPUT
+
+      - name: Generate Branch Name
+        id: generate_branch_name
+        run: |
+            echo "branch_name=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
 
       - name: Print Release File Name
-        run: echo "Release File Name ${{ steps.generate_release_file_name.outputs.release_file_name }}"
+        run: echo "Release File Name ${{ steps.generate_release_file_name.outputs.release_file_name }} on branch ${{ steps.generate_branch_name.outputs.branch_name }}"
         shell: bash
 
-      - name: Install system dependencies
+      - name: Create and run Docker Image
+        working-directory: ./docker/${{ matrix.os }}
         run: |
-          sudo apt-get update
-          sudo apt-get install ninja-build cmake build-essential libssl-dev libboost-all-dev
-          sudo apt-get install libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev
-
-      - name: Install cross compilation dependencies
-        run: |
-          sudo apt-get install g++-aarch64-linux-gnu gcc-aarch64-linux-gnu
-          sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
-        if: matrix.architecture == 'arm64'
-
-      - name: Create build directory
-        working-directory: .
-        run: |
-          mkdir build
-
-      - name: Run CMake and build webrtc-native-build
-        working-directory: build
-        run: |
-          cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type}} -DCMAKE_BUILD_ARCHITECTURE=${{ matrix.architecture }}
-          make -j2
-          make install
-
-      - name: Create Archive
-        working-directory: dist/${{ matrix.build-type }}
-        run: |
-          tar cvzf ${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz webrtc-native-build-${{ steps.generate_version_output.outputs.version }}
+          docker buildx build -t webrtc --build-arg BUILD_TYPE=${{ matrix.build-type }} --build-arg BUILD_ARCHITECTURE=${{ matrix.architecture }} --build-arg BUILD_BRANCH=${{ steps.generate_branch_name.outputs.branch_name }} .
+          docker run --rm --volume $PWD:/data webrtc tar cvzf /data/${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz ./
+          ls -l
+        shell: bash
 
       - name: Upload Release Asset
         id: upload-release-asset
@@ -127,37 +129,39 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_release_info.outputs.upload_url }}
-          asset_path: dist/${{ matrix.build-type }}/${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz
+          asset_path: ./docker/${{ matrix.os }}/${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz
           asset_name: ${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz
           asset_content_type: application/x-gzip
 
   build-mac:
     needs: create-release
     strategy:
+      fail-fast: false
       matrix:
-        os: [macos-11, macos-12]
+        os: [macos-11, macos-12, macos-13]
         architecture: [osx64]
         build-type: [Release, Debug]
 
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         with:
           name: release_url
 
       - name: Get Upload URL
         id: get_release_info
         run: |
-          echo "::set-output name=upload_url::$(cat release_url.txt)"
+          echo "upload_url=$(cat release_url.txt)" >> $GITHUB_OUTPUT
           ls -l
           cat release_url.txt
       - name: Generate Version Output
         id: generate_version_output
-        run: echo "::set-output name=version::$(cat VERSION)"
+
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Print Version Information
@@ -167,10 +171,10 @@ jobs:
       - name: Generate Release File Name
         id: generate_release_file_name
         run: |
-          echo "::set-output name=release_file_name::webrtc-native-build-${{ matrix.os }}-\
+          echo "release_file_name=webrtc-native-build-${{ matrix.os }}-\
           ${{ matrix.architecture }}-\
           ${{ matrix.build-type }}-\
-          ${{ steps.generate_version_output.outputs.version }}"
+          ${{ steps.generate_version_output.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Print Release File Name
         run: echo "Release File Name ${{ steps.generate_release_file_name.outputs.release_file_name }}"

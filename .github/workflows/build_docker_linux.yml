@@ -1,0 +1,74 @@
+# This workflow will create a release and build multiple versions of the webrtc library.
+name: build_docker_linux
+
+on:
+  workflow_dispatch:
+    inputs:
+      fail_fast:
+        description: "Should stop the workflow as soon as one configuration fails"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build-linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04, ubuntu-22.04]
+        architecture: [arm64, amd64]
+        build-type: [Release, Debug]
+
+    runs-on: ubuntu-22.04
+    steps:
+
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+            root-reserve-mb: 40000
+            swap-size-mb: 1024
+            remove-dotnet: 'true'
+            remove-android: 'true'
+            remove-haskell: 'true'
+            remove-codeql: 'true'
+            remove-docker-images: 'true'
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Generate Version Output
+        id: generate_version_output
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Print Version Information
+        run: echo "Version ${{ steps.generate_version_output.outputs.version }}"
+        shell: bash
+
+      - name: Generate Release File Name
+        id: generate_release_file_name
+        run: |
+          echo "release_file_name=webrtc-native-build-${{ matrix.os }}-\
+          ${{ matrix.architecture }}-\
+          ${{ matrix.build-type }}-\
+          ${{ steps.generate_version_output.outputs.version }}" >> $GITHUB_OUTPUT
+
+      - name: Generate Branch Name
+        id: generate_branch_name
+        run: |
+            echo "branch_name=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+
+      - name: Print Release File Name
+        run: echo "Release File Name ${{ steps.generate_release_file_name.outputs.release_file_name }} on branch ${{ steps.generate_branch_name.outputs.branch_name }}"
+        shell: bash
+
+      - name: Create and run Docker Image
+        working-directory: ./docker/${{ matrix.os }}
+        run: |
+          docker buildx build -t webrtc --build-arg BUILD_TYPE=${{ matrix.build-type }} --build-arg BUILD_ARCHITECTURE=${{ matrix.architecture }} --build-arg BUILD_BRANCH=${{ steps.generate_branch_name.outputs.branch_name }} .
+          docker run --rm --volume $PWD:/data webrtc tar cvzf /data/${{ steps.generate_release_file_name.outputs.release_file_name }}.tar.gz ./webrtc-native-build-${{ steps.generate_version_output.outputs.version }}
+          ls -l
+
+        shell: bash
+

@@ -1,5 +1,5 @@
-# VERSION MAJOR = 110, MINOR=0, BUILD=5481, PATCH=196
-set(WEBRTC_CHECKOUT 218b56e516386cd57c7513197528c3124bcd7ef3)
+# VERSION MAJOR = 121, MINOR=0, BUILD=6167, PATCH=54
+set(WEBRTC_CHECKOUT 3df661f79828194d0acb51a1480833bafd9e5066)
 
 if(WIN32)
 
@@ -77,25 +77,25 @@ else(WIN32)
 
     if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/webrtc/src")
         execute_process(
-            COMMAND fetch webrtc
+            COMMAND fetch --nohooks webrtc
             WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
             RESULT_VARIABLE fetch_webrtc_result
         )
         if(NOT ${fetch_webrtc_result} EQUAL 0)
-            message(FATAL_ERROR "\"fetch webrtc\" failed (${fetch_webrtc_result})")
+            message(FATAL_ERROR "\"fetch --nohooks webrtc\" failed (${fetch_webrtc_result})")
         endif()
 
         execute_process(
-            COMMAND gclient sync --with_branch_heads --with_tags
+            COMMAND git fetch
             WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
-            RESULT_VARIABLE gclient_sync_webrtc_result
+            RESULT_VARIABLE git_fetch_webrtc_result
         )
-        if(NOT ${gclient_sync_webrtc_result} EQUAL 0)
-            message(FATAL_ERROR "\"gclient sync --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
+        if(NOT ${git_fetch_webrtc_result} EQUAL 0)
+            message(FATAL_ERROR "\"git fetch\" failed (${git_fetch_webrtc_result})")
         endif()
 
         execute_process(
-            COMMAND git checkout ${WEBRTC_CHECKOUT}
+            COMMAND git checkout -f ${WEBRTC_CHECKOUT}
             WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src"
             RESULT_VARIABLE git_checkout_webrtc_result
         )
@@ -104,38 +104,39 @@ else(WIN32)
         endif()
 
         execute_process(
-            COMMAND gclient sync --with_branch_heads --with_tags
+            # Removing unused files and directory
+            COMMAND gclient sync -D
             WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc"
             RESULT_VARIABLE gclient_sync_webrtc_result
         )
         if(NOT ${gclient_sync_webrtc_result} EQUAL 0)
-            message(FATAL_ERROR "\"gclient sync --with_branch_heads --with_tags\" failed (${gclient_sync_webrtc_result})")
+            message(FATAL_ERROR "\"gclient sync -D\" failed (${gclient_sync_webrtc_result})")
         endif()
     endif()
 
 
     if (CMAKE_BUILD_ARCHITECTURE MATCHES arm64)
         execute_process(
-            COMMAND python install-sysroot.py --arch=${CMAKE_BUILD_ARCHITECTURE}
+            COMMAND python3 install-sysroot.py --arch=${CMAKE_BUILD_ARCHITECTURE}
             WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src/build/linux/sysroot_scripts"
             RESULT_VARIABLE build_sysroot_architecture
         )
 
         if(NOT ${build_sysroot_architecture} EQUAL 0)
-            message(FATAL_ERROR "\"python install-sysroot.py --arch=arm64\" failed (${build_sysroot_architecture})")
+            message(FATAL_ERROR "\"python3 install-sysroot.py --arch=arm64\" failed (${build_sysroot_architecture})")
         endif()
     endif()
 
 
     if (CMAKE_BUILD_ARCHITECTURE MATCHES arm32)
         execute_process(
-                COMMAND python install-sysroot.py --arch=arm
+                COMMAND python3 install-sysroot.py --arch=arm
                 WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/webrtc/src/build/linux/sysroot_scripts"
                 RESULT_VARIABLE build_sysroot_architecture
         )
 
         if(NOT ${build_sysroot_architecture} EQUAL 0)
-            message(FATAL_ERROR "\"python install-sysroot.py --arch=arm\" failed (${build_sysroot_architecture})")
+            message(FATAL_ERROR "\"python3 install-sysroot.py --arch=arm\" failed (${build_sysroot_architecture})")
         endif()
     endif()
 

@@ -22,6 +22,7 @@ elseif (CMAKE_BUILD_ARCHITECTURE MATCHES arm32)
     set(CMAKE_SYSROOT ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/webrtc_native/webrtc/src/build/linux/debian_bullseye_arm-sysroot)
     set(CMAKE_C_COMPILER /usr/bin/arm-linux-gnueabihf-gcc)
     set(CMAKE_CXX_COMPILER /usr/bin/arm-linux-gnueabihf-g++)
+
 elseif (CMAKE_BUILD_ARCHITECTURE MATCHES win64)
     # Nothing to do
 else()

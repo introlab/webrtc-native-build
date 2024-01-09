@@ -21,7 +21,7 @@ jobs:
 
       - name: Generate Version Output
         id: generate_version_output
-        run: echo "::set-output name=version::$(cat VERSION)"
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Print Version Information
@@ -155,12 +155,13 @@ jobs:
       - name: Get Upload URL
         id: get_release_info
         run: |
-          echo "::set-output name=upload_url::$(cat release_url.txt)"
+          echo "upload_url=$(cat release_url.txt)" >> $GITHUB_OUTPUT
           ls -l
           cat release_url.txt
       - name: Generate Version Output
         id: generate_version_output
-        run: echo "::set-output name=version::$(cat VERSION)"
+
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Print Version Information
@@ -170,10 +171,10 @@ jobs:
       - name: Generate Release File Name
         id: generate_release_file_name
         run: |
-          echo "::set-output name=release_file_name::webrtc-native-build-${{ matrix.os }}-\
+          echo "release_file_name=webrtc-native-build-${{ matrix.os }}-\
           ${{ matrix.architecture }}-\
           ${{ matrix.build-type }}-\
-          ${{ steps.generate_version_output.outputs.version }}"
+          ${{ steps.generate_version_output.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Print Release File Name
         run: echo "Release File Name ${{ steps.generate_release_file_name.outputs.release_file_name }}"

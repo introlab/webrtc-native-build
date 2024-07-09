@@ -35,6 +35,8 @@ RUN mkdir build
 
 WORKDIR /root/webrtc-native-build/build
 RUN cmake ../ -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_BUILD_ARCHITECTURE=${BUILD_ARCHITECTURE}
+RUN patch -u ../3rdParty/webrtc_native/webrtc/src/third_party/libvpx/BUILD.gn ../patches/libvpx_BUILD.gn.patch
+RUN cmake ../ -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_BUILD_ARCHITECTURE=${BUILD_ARCHITECTURE}
 RUN export PATH=/root/webrtc-native-build/3rdParty/depot_tools:$PATH && make -j2
 RUN make install
 

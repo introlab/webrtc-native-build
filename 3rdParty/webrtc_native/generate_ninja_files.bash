@@ -13,27 +13,27 @@ case "$architecture" in
 	i?86)
 		a=x86
 		extras=""
-		extra_flags="is_clang=true target_os=\"linux\""
+		extra_flags="is_clang=false target_os=\"linux\""
 	;;
 	x86_64|amd64)
 		a=x64
 		extras=""
-		extra_flags="is_clang=true target_os=\"linux\""
+		extra_flags="is_clang=false target_os=\"linux\""
 	;;
 	win64)
 		a=x64
 		extras=""
-		extra_flags="is_clang=true target_os=\"windows\""
+		extra_flags="is_clang=false target_os=\"windows\""
 	;;
 	arm32|armhf|armv*)
 		a=arm
 		extras=" arm_float_abi=\"hard\""
-		extra_flags="is_clang=true use_sysroot=true sysroot=\"$sysroot\" target_os=\"linux\" arm_control_flow_integrity=\"none\""
+		extra_flags="is_clang=false use_sysroot=true sysroot=\"$sysroot\" target_os=\"linux\" arm_control_flow_integrity=\"none\""
 	;;
 	arm64|aarch64)
 		a=arm64
 		extras=""
-		extra_flags="is_clang=true use_sysroot=true sysroot=\"$sysroot\" target_os=\"linux\" arm_control_flow_integrity=\"none\""
+		extra_flags="is_clang=false use_sysroot=true sysroot=\"$sysroot\" target_os=\"linux\" arm_control_flow_integrity=\"none\""
 	;;
 	osx64)
 		a=x64

@@ -192,6 +192,7 @@ jobs:
         working-directory: build
         run: |
           cmake ../ -DCMAKE_BUILD_TYPE=${{ matrix.build-type}} -DCMAKE_BUILD_ARCHITECTURE=${{ matrix.architecture }}
+          export PATH=$PWD/../3rdParty/depot_tools:$PATH
           make -j3
           make install
 

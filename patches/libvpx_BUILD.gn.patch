@@ -7,3 +7,12 @@
      source_set("libvpx_intrinsics_sve") {
        check_includes = false
        configs -= [ "//build/config/compiler:chromium_code" ]
+@@ -583,7 +583,7 @@ static_library("libvpx") {
+   if (current_cpu == "arm64") {
+     deps += [ ":libvpx_intrinsics_neon_dotprod" ]
+     deps += [ ":libvpx_intrinsics_neon_i8mm" ]
+-    if (!is_win) {
++    if (!is_win && is_clang) {
+       deps += [
+         ":libvpx_intrinsics_sve",
+         ":libvpx_intrinsics_sve2",

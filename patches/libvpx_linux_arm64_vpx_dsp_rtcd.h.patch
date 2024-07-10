@@ -1,9 +1,5 @@
-diff --git a/libvpx/source/config/linux/arm64/vpx_dsp_rtcd.h b/libvpx/source/config/linux/arm64/vpx_dsp_rtcd.h
-index 0e5bfd955c8..7bcc7b5f717 100644
---- a/libvpx/source/config/linux/arm64/vpx_dsp_rtcd.h
-+++ b/libvpx/source/config/linux/arm64/vpx_dsp_rtcd.h
 @@ -3106,7 +3106,6 @@ void vpx_subtract_block_neon(int rows,
- 
+
  uint64_t vpx_sum_squares_2d_i16_c(const int16_t* src, int stride, int size);
  uint64_t vpx_sum_squares_2d_i16_neon(const int16_t* src, int stride, int size);
 -uint64_t vpx_sum_squares_2d_i16_sve(const int16_t* src, int stride, int size);

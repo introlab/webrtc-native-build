@@ -1,7 +1,3 @@
-diff --git a/libvpx/source/config/linux/arm64-highbd/vpx_dsp_rtcd.h b/libvpx/source/config/linux/arm64-highbd/vpx_dsp_rtcd.h
-index 9d8ba2f6a46..606905b9067 100644
---- a/libvpx/source/config/linux/arm64-highbd/vpx_dsp_rtcd.h
-+++ b/libvpx/source/config/linux/arm64-highbd/vpx_dsp_rtcd.h
 @@ -1032,12 +1032,6 @@ void vpx_highbd_10_get16x16var_neon(const uint8_t* src_ptr,
                                      int ref_stride,
                                      unsigned int* sse,
@@ -758,7 +754,7 @@ index 9d8ba2f6a46..606905b9067 100644
                                                ptrdiff_t src_stride,
                                                uint16_t* dst,
 @@ -8010,7 +7668,6 @@ void vpx_subtract_block_neon(int rows,
- 
+
  uint64_t vpx_sum_squares_2d_i16_c(const int16_t* src, int stride, int size);
  uint64_t vpx_sum_squares_2d_i16_neon(const int16_t* src, int stride, int size);
 -uint64_t vpx_sum_squares_2d_i16_sve(const int16_t* src, int stride, int size);

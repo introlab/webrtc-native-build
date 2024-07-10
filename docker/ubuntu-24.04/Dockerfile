@@ -31,7 +31,7 @@ WORKDIR /root/webrtc-native-build/3rdParty/webrtc_native/webrtc/src/third_party/
 RUN git checkout 7c2b62e93487b772990fddc1905f22d4cfaee4a4
 
 WORKDIR /root/webrtc-native-build/build
-RUN patch -u ../3rdParty/webrtc_native/webrtc/src/third_party/libvpx/BUILD.gn ../patches/libvpx_BUILD.gn.patch
+RUN ../patches/apply_patch.sh
 RUN cmake ../ -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_BUILD_ARCHITECTURE=${BUILD_ARCHITECTURE}
 RUN export PATH=/root/webrtc-native-build/3rdParty/depot_tools:$PATH && make -j2
 RUN make install

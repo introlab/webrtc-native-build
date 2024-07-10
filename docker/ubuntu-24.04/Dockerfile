@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:24.04
 # Change default shell to bash
 SHELL ["/bin/bash", "--login", "-c"]
 
@@ -8,15 +8,7 @@ RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y \
     ninja-build  libssl-dev libboost-all-dev libglib2.0-dev libgtk-3-dev libpulse-dev libasound2-dev patch
 
 # Install cross-compiler
-RUN apt install -y g++-10-aarch64-linux-gnu gcc-10-aarch64-linux-gnu gcc-10-arm-linux-gnueabihf g++-10-arm-linux-gnueabihf clang
-RUN update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-10 100
-RUN update-alternatives --install /usr/bin/aarch64-linux-gnu-g++ aarch64-linux-gnu-g++ /usr/bin/aarch64-linux-gnu-g++-10 100
-RUN update-alternatives --set aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-10
-RUN update-alternatives --set aarch64-linux-gnu-g++ /usr/bin/aarch64-linux-gnu-g++-10
-RUN update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcc arm-linux-gnueabihf-gcc /usr/bin/arm-linux-gnueabihf-gcc-10 100
-RUN update-alternatives --install /usr/bin/arm-linux-gnueabihf-g++ arm-linux-gnueabihf-g++ /usr/bin/arm-linux-gnueabihf-g++-10 100
-RUN update-alternatives --set arm-linux-gnueabihf-gcc /usr/bin/arm-linux-gnueabihf-gcc-10
-RUN update-alternatives --set arm-linux-gnueabihf-g++ /usr/bin/arm-linux-gnueabihf-g++-10
+RUN apt install -y g++-aarch64-linux-gnu gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf clang
 
 # Define a build-time argument
 ARG BUILD_TYPE=Release
@@ -30,11 +22,15 @@ WORKDIR /root
 RUN git clone -b ${BUILD_BRANCH}  https://github.com/introlab/webrtc-native-build.git --recurse-submodules
 
 WORKDIR /root/webrtc-native-build
-
 RUN mkdir build
 
 WORKDIR /root/webrtc-native-build/build
 RUN cmake ../ -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_BUILD_ARCHITECTURE=${BUILD_ARCHITECTURE}
+
+WORKDIR /root/webrtc-native-build/3rdParty/webrtc_native/webrtc/src/third_party/boringssl/src
+RUN git checkout 7c2b62e93487b772990fddc1905f22d4cfaee4a4
+
+WORKDIR /root/webrtc-native-build/build
 RUN ../patches/apply_patch.sh
 RUN cmake ../ -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_BUILD_ARCHITECTURE=${BUILD_ARCHITECTURE}
 RUN export PATH=/root/webrtc-native-build/3rdParty/depot_tools:$PATH && make -j2

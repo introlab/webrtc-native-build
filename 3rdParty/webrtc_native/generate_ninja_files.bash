@@ -38,7 +38,7 @@ case "$architecture" in
 	osx64)
 		a=x64
 		extras=""
-		extra_flags="is_clang=true"
+		extra_flags="is_clang=true target_os=\"mac\""
 	;;
 	*)
 		echo>&2 "WARNING: Unknown target platform: $a, continuing anyway"

@@ -166,8 +166,8 @@ if(APPLE)
     file(GLOB libyuv_OBJETS ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libyuv/libyuv_internal/*.o)
     add_custom_command(
         OUTPUT libboringssl.a libyuv.a
-        COMMAND ar rcs lib/libboringssl.a ${boringssl_OBJETS}
-        COMMAND ar rcs lib/libyuv_internal.a ${libyuv_OBJETS}
+        COMMAND libtool -static -o libboringssl.a ${boringssl_OBJETS}
+        COMMAND libtool -static -o libyuv_internal.a ${libyuv_OBJETS}
         DEPENDS ${boringssl_LIBRARY} ${libyuv_LIBRARY}
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party
         VERBATIM

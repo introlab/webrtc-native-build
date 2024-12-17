@@ -164,23 +164,29 @@ if(APPLE)
     # Create libyuv and boringssl archives
     file(GLOB boringssl_OBJETS ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/boringssl/*.o)
     file(GLOB libyuv_OBJETS ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libyuv/libyuv_internal/*.o)
-    add_custom_command(
-        OUTPUT ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libboringssl.a
-        COMMAND libtool -static -o libboringssl.a ${boringssl_OBJETS}
-        DEPENDS ${boringssl_LIBRARY}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party
-        VERBATIM
-    )
-    add_custom_command(
-        OUTPUT ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libyuv_internal.a
-        COMMAND libtool -static -o libyuv_internal.a ${libyuv_OBJETS}
-        DEPENDS ${libyuv_LIBRARY}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party
-        VERBATIM
-    )
+    # add_custom_command(
+    #     OUTPUT ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libboringssl.a
+    #     COMMAND libtool -static -o libboringssl.a ${boringssl_OBJETS}
+    #     DEPENDS ${boringssl_LIBRARY}
+    #     WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party
+    #     VERBATIM
+    # )
+    # add_custom_command(
+    #     OUTPUT ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libyuv_internal.a
+    #     COMMAND libtool -static -o libyuv_internal.a ${libyuv_OBJETS}
+    #     DEPENDS ${libyuv_LIBRARY}
+    #     WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party
+    #     VERBATIM
+    # )
 
-    install(FILES ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libboringssl.a DESTINATION lib)
-    install(FILES ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libyuv_internal.a DESTINATION lib)
+    add_library(boringssl_archive STATIC ${boringssl_OBJETS})
+    add_library(libyuv_archive STATIC ${libyuv_OBJETS})
+
+    install(TARGETS boringssl_archive DESTINATION lib)
+    install(TARGETS libyuv_archive DESTINATION lib)
+
+    # install(FILES ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libboringssl.a DESTINATION lib)
+    # install(FILES ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libyuv_internal.a DESTINATION lib)
 else()
     install(FILES ${boringssl_LIBRARY} DESTINATION lib)
     install(FILES ${libyuv_LIBRARY} DESTINATION lib)

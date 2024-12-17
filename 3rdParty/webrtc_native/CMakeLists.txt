@@ -159,8 +159,26 @@ endif(WIN32)
 # Manual installation of all dependencies.
 list(GET webrtc_native_LIBRARY 0 webrtc_native_LIBRARY_only)
 install(FILES ${webrtc_native_LIBRARY_only} DESTINATION lib)
-install(FILES ${boringssl_LIBRARY} DESTINATION lib)
-install(FILES ${libyuv_LIBRARY} DESTINATION lib)
+
+if(APPLE)
+    # Create libyuv and boringssl archives
+    file(GLOB boringssl_OBJETS ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/boringssl/*.o)
+    file(GLOB libyuv_OBJETS ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libyuv/libyuv_internal/*.o)
+    add_custom_command(
+        OUTPUT libboringssl.a libyuv.a
+        COMMAND ar rcs lib/libboringssl.a ${boringssl_OBJETS}
+        COMMAND ar rcs lib/libyuv_internal.a ${libyuv_OBJETS}
+        DEPENDS ${boringssl_LIBRARY} ${libyuv_LIBRARY}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party
+        VERBATIM
+    )
+
+    install(FILES ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libboringssl.a DESTINATION lib)
+    install(FILES ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libyuv_internal.a DESTINATION lib)
+else()
+    install(FILES ${boringssl_LIBRARY} DESTINATION lib)
+    install(FILES ${libyuv_LIBRARY} DESTINATION lib)
+endif()
 
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/boringssl DESTINATION lib)
 install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/boringssl_asm DESTINATION lib)

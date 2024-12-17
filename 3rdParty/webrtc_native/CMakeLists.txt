@@ -165,10 +165,16 @@ if(APPLE)
     file(GLOB boringssl_OBJETS ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/boringssl/boringssl/*.o)
     file(GLOB libyuv_OBJETS ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libyuv/libyuv_internal/*.o)
     add_custom_command(
-        OUTPUT libboringssl.a libyuv.a
+        OUTPUT ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libboringssl.a
         COMMAND libtool -static -o libboringssl.a ${boringssl_OBJETS}
+        DEPENDS ${boringssl_LIBRARY}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party
+        VERBATIM
+    )
+    add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party/libyuv_internal.a
         COMMAND libtool -static -o libyuv_internal.a ${libyuv_OBJETS}
-        DEPENDS ${boringssl_LIBRARY} ${libyuv_LIBRARY}
+        DEPENDS ${libyuv_LIBRARY}
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/webrtc/src/out/${CMAKE_BUILD_TYPE}/obj/third_party
         VERBATIM
     )
